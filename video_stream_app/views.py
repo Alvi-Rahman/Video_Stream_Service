@@ -141,9 +141,9 @@ def admin_product_operation(request, ops):
                 messages.error(request, "Something Went Wrong.")
             return redirect("/video_stream_admin/subscriptions/add/")
         elif 'edit' in ops:
-            cat_id = ops.split('__')[-1]
-            cat = models.Subscription.objects.filter(pk=cat_id).first()
-            form = SubscriptionForm(request.POST, instance=cat)
+            subs_id = ops.split('__')[-1]
+            subscription = models.Subscription.objects.filter(pk=subs_id).first()
+            form = SubscriptionForm(request.POST, instance=subscription)
             if form.is_valid():
                 form.save()
                 messages.success(request, "Succesfully Updated.")
@@ -163,8 +163,8 @@ def admin_product_operation(request, ops):
                                    "btn_name": "ADD Subscription",
                                    "subscription_plans": "active"})
         elif 'edit' in ops:
-            prod_id = ops.split('__')[-1]
-            subs = models.Subscription.objects.filter(pk=prod_id).first()
+            subs_id = ops.split('__')[-1]
+            subs = models.Subscription.objects.filter(pk=subs_id).first()
             form = SubscriptionForm(initial={"subscription_type": subs.subscription_type,
                                              "subscription_price": subs.subscription_price,
                                              "subscription_validity": subs.subscription_validity
@@ -178,9 +178,9 @@ def admin_product_operation(request, ops):
                                    "btn_name": "Edit Subscription",
                                    "subscription_plans": "active"})
         elif 'delete' in ops:
-            prod_id = ops.split('__')[-1]
+            subs_id = ops.split('__')[-1]
             # return JsonResponse(cat_id, safe=False)
-            cat = models.Subscription.objects.filter(pk=prod_id).delete()
+            _ = models.Subscription.objects.filter(pk=subs_id).delete()
             return redirect("subscription_plans")
         else:
             return redirect("subscription_plans")
