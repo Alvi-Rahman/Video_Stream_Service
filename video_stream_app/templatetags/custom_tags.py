@@ -1,11 +1,9 @@
 from django import template
+from django.utils import timezone
 
 register = template.Library()
 
 
-@register.filter(name='calculate_total_price')
-def calculate_total_price(price, unit):
-    price = float(price)
-    unit = int(unit)
-
-    return price * unit
+@register.filter(name='calculate_time')
+def calculate_time(base_time, months):
+    return f"{((base_time + timezone.timedelta(days=months*30)) - timezone.now()).days} Days"

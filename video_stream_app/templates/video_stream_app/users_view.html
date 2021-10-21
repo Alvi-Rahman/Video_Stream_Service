@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load custom_tags %}
 {% block title %} {{ title }} | VideoStream {% endblock %}
 {% load static %}
 
@@ -42,7 +43,7 @@
                     <td>{{ user.user_type }}</td>
                     <td>{{ user.is_blocked }}</td>
                     <td>{{ user.purchase_date }}</td>
-                    <td>{{ user.purchase_date }}</td>
+                    <td>{{ user.purchase_date|calculate_time:user.user_subscription.subscription_validity }}</td>
                     <td><a href="/video_stream_admin/product/edit__{{ product.pk }}/"><i class="fas fa-edit"></i></a></td>
                     <td><a onclick="deleteFunc({{ product.pk }})" href="" ><i class="fas fa-trash-alt" style="color: tomato"></i></a></td>
                 </tr>
