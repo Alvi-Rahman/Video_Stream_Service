@@ -136,7 +136,7 @@ def subscription_type_list(request):
                       'subscriptions': models.Subscription.objects.all(),
                       'title': 'Available Plans',
                       'is_logged_in': request.user.is_authenticated,
-                      'subscription_plans': 'active',
+                      'subscription_categories': 'active',
                       'admin': True
                   })
 
