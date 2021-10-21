@@ -157,11 +157,6 @@ def admin_product_operation(request, ops):
             else:
                 messages.error(request, "Something Went Wrong.")
             return redirect("/video_stream_admin/subscription_plans/")
-        elif 'delete' in ops:
-            prod_id = ops.split('__')[-1]
-            # return JsonResponse(cat_id, safe=False)
-            cat = models.Subscription.objects.filter(pk=prod_id).delete()
-            return JsonResponse(1, safe=False)
 
     elif request.method == 'GET':
         if ops == 'add':
@@ -189,5 +184,10 @@ def admin_product_operation(request, ops):
                                    'logout': request.user.is_authenticated,
                                    "btn_name": "Edit Subscription",
                                    "subscription_plans": "active"})
+        elif 'delete' in ops:
+            prod_id = ops.split('__')[-1]
+            # return JsonResponse(cat_id, safe=False)
+            cat = models.Subscription.objects.filter(pk=prod_id).delete()
+            return redirect("subscription_plans")
         else:
-            return redirect("admin_product")
+            return redirect("subscription_plans")
