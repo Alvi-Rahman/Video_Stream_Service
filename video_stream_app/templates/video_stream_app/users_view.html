@@ -17,26 +17,34 @@
             <thead>
                 <tr>
                     <th scope="col">#</th>
-                    <th scope="col">Product Code</th>
-                    <th scope="col">Product Name</th>
-                    <th scope="col">Product Category</th>
-                    <th scope="col">Product Unit_price</th>
-                    <th scope="col">Current Stock</th>
+                    <th scope="col">Username</th>
+                    <th scope="col">Full Name</th>
+                    <th scope="col">Email</th>
+                    <th scope="col">Phone</th>
+                    <th scope="col">Current Subscription</th>
+                    <th scope="col">Type</th>
+                    <th scope="col">Is Blocked</th>
+                    <th scope="col">Purchase Date</th>
+                    <th scope="col">Remaining days</th>
                     <th scope="col">Edit</th>
                     <th scope="col">Delete</th>
                 </tr>
             </thead>
             <tbody>
-            {% for product in products %}
+            {% for user in users %}
                 <tr>
                     <th scope="row">{{ forloop.counter }}</th>
-                    <td>{{ product.product_code }}</td>
-                    <td>{{ product.product_name }}</td>
-                    <td>{{ product.product_category }}</td>
-                    <td>{{ product.product_unit_price }}</td>
-                    <td>{{ product.current_stock }}</td>
+                    <td>{{ user.username }}</td>
+                    <td>{{ user.full_name }}</td>
+                    <td>{{ user.email }}</td>
+                    <td>{{ user.phone }}</td>
+                    <td>{{ user.user_subscription }}</td>
+                    <td>{{ user.user_type }}</td>
+                    <td>{{ user.is_blocked }}</td>
+                    <td>{{ user.purchase_date }}</td>
+                    <td>{{ user.purchase_date }}</td>
                     <td><a href="/video_stream_admin/product/edit__{{ product.pk }}/"><i class="fas fa-edit"></i></a></td>
-                    <td><a onclick="deleteFunc({{ product.pk }})" href="" ><i class="fas fa-trash-alt"></i></a></td>
+                    <td><a onclick="deleteFunc({{ product.pk }})" href="" ><span style="color: tomato;"><i class="fas fa-trash-alt"></i></span></a></td>
                 </tr>
             {% endfor %}
             </tbody>

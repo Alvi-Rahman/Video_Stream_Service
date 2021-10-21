@@ -117,7 +117,7 @@ def video_stream_admin(request):
                                                                                "admin_login": "active"})
 
 
-@login_required(login_url='/login/')
+@login_required(login_url='/video_stream_admin/')
 def subscription_plan_list(request):
     return render(request, 'video_stream_app/subscriptions.html',
                   {
@@ -129,7 +129,7 @@ def subscription_plan_list(request):
                   })
 
 
-@login_required(login_url='/login/')
+@login_required(login_url='/video_stream_admin/')
 def subscription_type_list(request):
     return render(request, 'video_stream_app/subscription_type.html',
                   {
@@ -137,6 +137,18 @@ def subscription_type_list(request):
                       'title': 'Available Plans',
                       'is_logged_in': request.user.is_authenticated,
                       'subscription_types': 'active',
+                      'admin': True
+                  })
+
+
+@login_required(login_url='/video_stream_admin/')
+def user_list(request):
+    return render(request, 'video_stream_app/users_view.html',
+                  {
+                      'users': models.User.objects.all(),
+                      'title': 'Users',
+                      'is_logged_in': request.user.is_authenticated,
+                      'users_link': 'active',
                       'admin': True
                   })
 
