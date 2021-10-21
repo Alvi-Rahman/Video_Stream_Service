@@ -3,19 +3,12 @@ from django.contrib.auth import login, authenticate, logout
 from .forms import (SubscriptionForm, UserRegistrationForm, UserLoginForm)
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
-from django.db.models import F, Sum, Count
-from django.db.utils import IntegrityError
 from . import models
-from django.http import JsonResponse, response
-import json
-import os
-from django.conf import settings
-from django.http import FileResponse, Http404
 
 
 @login_required(login_url='/login/')
 def home(request):
-    return render(request, 'home_page.html',
+    return render(request, 'video_stream_app/home_page.html',
                   {
                       'is_logged_in': request.user.is_authenticated,
                       'home': 'active'
@@ -24,7 +17,7 @@ def home(request):
 
 @login_required(login_url='/video_stream_admin/')
 def admin_home(request):
-    return render(request, 'admin_home.html',
+    return render(request, 'video_stream_app/admin_home.html',
                   {
                       'is_logged_in': request.user.is_authenticated,
                       "admin": 1,
