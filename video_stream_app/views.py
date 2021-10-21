@@ -156,7 +156,7 @@ def admin_product_operation(request, ops):
                 messages.success(request, "Succesfully Updated.")
             else:
                 messages.error(request, "Something Went Wrong.")
-            return redirect("/supershop_admin/category/view/")
+            return redirect("/video_stream_admin/subscription_plans/")
         elif 'delete' in ops:
             prod_id = ops.split('__')[-1]
             # return JsonResponse(cat_id, safe=False)
@@ -187,20 +187,18 @@ def admin_product_operation(request, ops):
                           })
         elif 'edit' in ops:
             prod_id = ops.split('__')[-1]
-            prod = models.Subscription.objects.filter(pk=prod_id).first()
-            form = SubscriptionForm(initial={"product_code": prod.product_code,
-                                             "product_name": prod.product_name,
-                                             "product_category": prod.product_category,
-                                             "product_unit_price": prod.product_unit_price,
-                                             "current_stock": prod.current_stock
+            subs = models.Subscription.objects.filter(pk=prod_id).first()
+            form = SubscriptionForm(initial={"subscription_type": subs.subscription_type,
+                                             "subscription_price": subs.subscription_price,
+                                             "subscription_validity": subs.subscription_validity
                                              })
             return render(request, "video_stream_app/all_forms.html",
                           context={'is_logged_in': request.user.is_authenticated,
                                    "form": form,
-                                   "title": "Edit Category",
-                                   "admin": 1,
+                                   "title": "Edit Subscription",
+                                   "admin": True,
                                    'logout': request.user.is_authenticated,
-                                   "btn_name": "Edit Category",
-                                   "admin_product": "active"})
+                                   "btn_name": "Edit Subscription",
+                                   "subscription_plans": "active"})
         else:
             return redirect("admin_product")

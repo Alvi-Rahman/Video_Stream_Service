@@ -47,12 +47,16 @@
                                 <h5> {{ subscription.subscription_price}} BDT </h5>
                                 
                                 <div class="pt-1">
-                                    <span style="color: Dodgerblue;" class="pr-2">
-                                        <i class="fas fa-edit"></i>
-                                    </span>
-                                    <span style="color: tomato;" class="pl-2">
-                                        <i class="fas fa-trash-alt"></i>
-                                    </span>
+                                    <a href="/video_stream_admin/subscriptions/edit__{{ subscription.pk }}/">
+                                        <span style="color: Dodgerblue;" class="pr-2">
+                                            <i class="fas fa-edit"></i>
+                                        </span>
+                                    </a>
+                                    <a href="/video_stream_admin/product/edit__{{ product.pk }}/">
+                                        <span style="color: tomato;" class="pl-2">
+                                            <i class="fas fa-trash-alt"></i>
+                                        </span>
+                                    </a>
                                 </div>
                                 
 
