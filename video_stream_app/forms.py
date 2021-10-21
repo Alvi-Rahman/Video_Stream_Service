@@ -45,16 +45,3 @@ class SubscriptionForm(forms.ModelForm):
     class Meta:
         model = Subscription
         fields = ('subscription_type', 'subscription_price', 'subscription_validity')
-
-
-class SubscriptionEditForm(forms.ModelForm):
-    subscription_type = forms.ModelChoiceField(queryset=SubscriptionType.objects.all(), required=True,
-                                               widget=forms.Select(attrs={'class': 'form-control'}))
-    subscription_price = forms.DecimalField(max_digits=10, decimal_places=2,
-                                            widget=forms.TextInput(attrs={'class': 'form-control'}))
-    subscription_validity = forms.IntegerField(required=True,
-                                               widget=forms.TextInput(attrs={'class': 'form-control'}))
-
-    class Meta:
-        model = Subscription
-        fields = ('subscription_type', 'subscription_price', 'subscription_validity')

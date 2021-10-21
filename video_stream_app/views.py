@@ -1,6 +1,6 @@
 from django.contrib import messages
 from django.contrib.auth import login, authenticate, logout
-from .forms import (SubscriptionForm, UserRegistrationForm, UserLoginForm, SubscriptionEditForm)
+from .forms import (SubscriptionForm, UserRegistrationForm, UserLoginForm)
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.db.models import F, Sum, Count
@@ -150,7 +150,7 @@ def admin_product_operation(request, ops):
         elif 'edit' in ops:
             cat_id = ops.split('__')[-1]
             cat = models.Subscription.objects.filter(pk=cat_id).first()
-            form = SubscriptionEditForm(request.POST, instance=cat)
+            form = SubscriptionForm(request.POST, instance=cat)
             if form.is_valid():
                 form.save()
                 messages.success(request, "Succesfully Updated.")
@@ -187,13 +187,13 @@ def admin_product_operation(request, ops):
                           })
         elif 'edit' in ops:
             prod_id = ops.split('__')[-1]
-            prod = models.Product.objects.filter(pk=prod_id).first()
-            form = SubscriptionEditForm(initial={"product_code": prod.product_code,
-                                                 "product_name": prod.product_name,
-                                                 "product_category": prod.product_category,
-                                                 "product_unit_price": prod.product_unit_price,
-                                                 "current_stock": prod.current_stock
-                                                 })
+            prod = models.Subscription.objects.filter(pk=prod_id).first()
+            form = SubscriptionForm(initial={"product_code": prod.product_code,
+                                             "product_name": prod.product_name,
+                                             "product_category": prod.product_category,
+                                             "product_unit_price": prod.product_unit_price,
+                                             "current_stock": prod.current_stock
+                                             })
             return render(request, "video_stream_app/all_forms.html",
                           context={'is_logged_in': request.user.is_authenticated,
                                    "form": form,
