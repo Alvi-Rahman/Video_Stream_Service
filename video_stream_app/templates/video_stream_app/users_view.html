@@ -43,9 +43,13 @@
                     <td>{{ user.user_type }}</td>
                     <td>{{ user.is_blocked }}</td>
                     <td>{{ user.purchase_date }}</td>
-                    <td>{{ user.purchase_date|calculate_time:user.user_subscription.subscription_validity }}</td>
-                    <td><a href="/video_stream_admin/product/edit__{{ product.pk }}/"><i class="fas fa-edit"></i></a></td>
-                    <td><a onclick="deleteFunc({{ product.pk }})" href="" ><i class="fas fa-trash-alt" style="color: tomato"></i></a></td>
+                    {% if users.user_subscription %}
+                        <td>{{ user.purchase_date|calculate_time:user.user_subscription.subscription_validity }}</td>
+                    {% else %}
+                        <td> None </td>
+                    {% endif %}
+                    <td><a href="/video_stream_admin/user/edit__{{ user.pk }}/"><i class="fas fa-edit"></i></a></td>
+                    <td><a onclick="deleteFunc({{ user.pk }})" href="" ><i class="fas fa-trash-alt" style="color: tomato"></i></a></td>
                 </tr>
             {% endfor %}
             </tbody>
@@ -55,18 +59,18 @@
 
     <script>
         function deleteFunc(pk) {
-            var txt;
+            let url;
             if (confirm("Are you sure you want to delete!")) {
-                url = "/video_stream_admin/product/delete__"+pk+"/";
+                url = "/video_stream_admin/user/delete__" + pk + "/";
 
                 $.post(url,
-                {
-                    data: pk
-                },
-                function(data){
-                    console.log(data);
+                    {
+                        data: pk
+                    },
+                    function (data) {
+                        location.reload();
 
-                });
+                    });
 
             } else {
                 console.log("Not Deleted");

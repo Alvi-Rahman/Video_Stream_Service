@@ -1,6 +1,8 @@
 from django.contrib import messages
 from django.contrib.auth import login, authenticate, logout
-from .forms import (SubscriptionForm, UserRegistrationForm, UserLoginForm, SubscriptionTypeForm)
+from django.http import JsonResponse
+
+from .forms import (SubscriptionForm, UserRegistrationForm, UserLoginForm, SubscriptionTypeForm, UserEditForm)
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from . import models
@@ -265,3 +267,54 @@ def admin_subscription_type_operation(request, ops):
         else:
             return redirect("subscription_type_list")
 
+
+@login_required(login_url='/video_stream_admin/')
+def user_operations(request, ops):
+    if request.method == "GET":
+        if 'edit' in ops:
+            user_id = ops.split('__')[-1]
+            user = models.User.objects.filter(pk=user_id).first()
+            form = UserEditForm(initial={
+                "username": user.username,
+                "full_name": user.full_name,
+                "email": user.email,
+                "phone": user.phone,
+                "user_subscription": user.user_subscription,
+                "user_type": user.user_type,
+                "is_subscribed": user.is_subscribed,
+                "is_blocked": user.is_blocked,
+                "purchase_date": user.purchase_date,
+            })
+
+            return render(request, "video_stream_app/all_forms.html",
+                          context={'is_logged_in': request.user.is_authenticated,
+                                   "form": form,
+                                   "title": "Edit User",
+                                   "admin": True,
+                                   'logout': request.user.is_authenticated,
+                                   "btn_name": "Edit User",
+                                   "users_link": "active"})
+        elif 'delete' in ops:
+            user_id = ops.split('__')[-1]
+            # return JsonResponse(cat_id, safe=False)
+            _ = models.User.objects.filter(pk=user_id).delete()
+            return redirect("user_list")
+    elif request.method == "POST":
+        if 'edit' in ops:
+            user_id = ops.split('__')[-1]
+            user = models.User.objects.filter(pk=user_id).first()
+            form = UserEditForm(request.POST, instance=user)
+            if form.is_valid():
+                form.save()
+                messages.success(request, "Succesfully Updated.")
+            else:
+                messages.error(request, "Something Went Wrong.")
+            return redirect("user_list")
+
+        elif 'delete' in ops:
+            user_id = ops.split('__')[-1]
+            # return JsonResponse(cat_id, safe=False)
+            _ = models.User.objects.filter(pk=user_id).delete()
+            return JsonResponse(1, safe=False)
+
+    return redirect("user_list")
