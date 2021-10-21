@@ -48,9 +48,9 @@ def signup(request):
         else:
             form = UserRegistrationForm()
             return render(request, 'video_stream_app/all_forms.html', {'form': form,
-                                                      "btn_name": "SignUp",
-                                                      "title": "Sign Up",
-                                                      "signup": "active"})
+                                                                       "btn_name": "SignUp",
+                                                                       "title": "Sign Up",
+                                                                       "signup": "active"})
 
 
 def login_view(request):
@@ -74,9 +74,9 @@ def login_view(request):
         else:
             form = UserLoginForm()
             return render(request, "video_stream_app/all_forms.html", context={"form": form,
-                                                              "btn_name": "Login",
-                                                              "title": "Login",
-                                                              "login": "active"})
+                                                                               "btn_name": "Login",
+                                                                               "title": "Login",
+                                                                               "login": "active"})
 
 
 def logout_view(request):
@@ -119,9 +119,9 @@ def video_stream_admin(request):
         else:
             form = UserLoginForm()
             return render(request, "video_stream_app/all_forms.html", context={"form": form,
-                                                              "btn_name": "Login",
-                                                              "title": "Admin Login",
-                                                              "admin_login": "active"})
+                                                                               "btn_name": "Login",
+                                                                               "title": "Admin Login",
+                                                                               "admin_login": "active"})
 
 
 @login_required(login_url='/login/')
@@ -189,11 +189,11 @@ def admin_product_operation(request, ops):
             prod_id = ops.split('__')[-1]
             prod = models.Product.objects.filter(pk=prod_id).first()
             form = SubscriptionEditForm(initial={"product_code": prod.product_code,
-                                            "product_name": prod.product_name,
-                                            "product_category": prod.product_category,
-                                            "product_unit_price": prod.product_unit_price,
-                                            "current_stock": prod.current_stock
-                                            })
+                                                 "product_name": prod.product_name,
+                                                 "product_category": prod.product_category,
+                                                 "product_unit_price": prod.product_unit_price,
+                                                 "current_stock": prod.current_stock
+                                                 })
             return render(request, "video_stream_app/all_forms.html",
                           context={'is_logged_in': request.user.is_authenticated,
                                    "form": form,
