@@ -9,7 +9,7 @@ class UserRegistrationForm(UserCreationForm):
                                widget=forms.TextInput(attrs={'class': 'form-control'}))
     email = forms.EmailField(max_length=255, help_text='Required. Inform a valid email address.',
                              widget=forms.EmailInput(attrs={'class': 'form-control'}))
-    phone = forms.CharField(max_length=15, required=False, widget=forms.EmailInput(
+    phone = forms.CharField(max_length=15, required=False, widget=forms.TextInput(
         attrs={'class': 'form-control'}))
     full_name = forms.CharField(max_length=15, required=False, widget=forms.EmailInput(
         attrs={'class': 'form-control'}))
@@ -36,11 +36,11 @@ class UserLoginForm(AuthenticationForm):
 
 class SubscriptionForm(forms.ModelForm):
     subscription_type = forms.ModelChoiceField(queryset=SubscriptionType.objects.all(), required=True,
-                                              widget=forms.Select(attrs={'class': 'form-control'}))
+                                               widget=forms.Select(attrs={'class': 'form-control'}))
     subscription_price = forms.DecimalField(max_digits=10, decimal_places=2,
                                             widget=forms.TextInput(attrs={'class': 'form-control'}))
     subscription_validity = forms.IntegerField(required=True,
-                                    widget=forms.TextInput(attrs={'class': 'form-control'}))
+                                               widget=forms.TextInput(attrs={'class': 'form-control'}))
 
     class Meta:
         model = Subscription
@@ -54,3 +54,26 @@ class SubscriptionTypeForm(forms.ModelForm):
     class Meta:
         model = SubscriptionType
         fields = ('type_name',)
+
+
+class UserEditForm(forms.ModelForm):
+    username = forms.CharField(max_length=255,
+                               widget=forms.TextInput(attrs={'class': 'form-control'}))
+    full_name = forms.CharField(max_length=255, required=False,
+                                widget=forms.TextInput(attrs={'class': 'form-control'}))
+    email = forms.CharField(max_length=255,
+                            widget=forms.TextInput(attrs={'class': 'form-control'}))
+    phone = forms.CharField(max_length=255, required=False,
+                            widget=forms.TextInput(attrs={'class': 'form-control'}))
+    user_subscription = forms.ModelChoiceField(queryset=Subscription.objects.all(),
+                                               widget=forms.Select(attrs={'class': 'form-control'}))
+    user_type = forms.ChoiceField(choices=User.TYPE_CHOICES,
+                                  widget=forms.Select(attrs={'class': 'form-control'}))
+    is_subscribed = forms.BooleanField(required=False)
+    is_blocked = forms.BooleanField(required=False)
+    purchase_date = forms.DateTimeField(widget=forms.SelectDateWidget(attrs={'class': 'form-control'}))
+
+    class Meta:
+        model = User
+        fields = ('username', 'full_name', 'email', 'phone', 'user_subscription',
+                  'user_type', 'is_subscribed', 'is_blocked', 'purchase_date')
