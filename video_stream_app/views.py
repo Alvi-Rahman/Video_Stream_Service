@@ -213,8 +213,8 @@ def admin_subscription_type_operation(request, ops):
             return redirect("admin_subscription_type_operation")
         elif 'edit' in ops:
             subs_id = ops.split('__')[-1]
-            subscription = models.Subscription.objects.filter(pk=subs_id).first()
-            form = SubscriptionTypeForm(request.POST, instance=subscription)
+            subscription_type = models.SubscriptionType.objects.filter(pk=subs_id).first()
+            form = SubscriptionTypeForm(request.POST, instance=subscription_type)
             if form.is_valid():
                 form.save()
                 messages.success(request, "Succesfully Updated.")
@@ -232,22 +232,20 @@ def admin_subscription_type_operation(request, ops):
                                    "admin": 1,
                                    'logout': request.user.is_authenticated,
                                    "btn_name": "ADD Subscription Type",
-                                   "subscription_categories": "active"})
+                                   "subscription_types": "active"})
         elif 'edit' in ops:
             subs_id = ops.split('__')[-1]
-            subs = models.Subscription.objects.filter(pk=subs_id).first()
-            form = SubscriptionTypeForm(initial={"subscription_type": subs.subscription_type,
-                                             "subscription_price": subs.subscription_price,
-                                             "subscription_validity": subs.subscription_validity
-                                             })
+            subs_type = models.SubscriptionType.objects.filter(pk=subs_id).first()
+            form = SubscriptionTypeForm(initial={"type_name": subs_type.type_name})
+
             return render(request, "video_stream_app/all_forms.html",
                           context={'is_logged_in': request.user.is_authenticated,
                                    "form": form,
-                                   "title": "Edit Subscription",
+                                   "title": "Edit Subscription Type",
                                    "admin": True,
                                    'logout': request.user.is_authenticated,
-                                   "btn_name": "Edit Subscription",
-                                   "subscription_plans": "active"})
+                                   "btn_name": "Edit Subscription Type",
+                                   "subscription_types": "active"})
         elif 'delete' in ops:
             subs_id = ops.split('__')[-1]
             # return JsonResponse(cat_id, safe=False)
