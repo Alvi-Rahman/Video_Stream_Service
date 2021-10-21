@@ -129,6 +129,18 @@ def subscription_plan_list(request):
                   })
 
 
+@login_required(login_url='/login/')
+def subscription_type_list(request):
+    return render(request, 'video_stream_app/subscriptions.html',
+                  {
+                      'subscriptions': models.Subscription.objects.all(),
+                      'title': 'Available Plans',
+                      'is_logged_in': request.user.is_authenticated,
+                      'subscription_plans': 'active',
+                      'admin': True
+                  })
+
+
 @login_required(login_url='/video_stream_admin/')
 def admin_product_operation(request, ops):
     if request.method == "POST":
