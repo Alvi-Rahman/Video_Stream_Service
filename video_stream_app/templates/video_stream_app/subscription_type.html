@@ -15,26 +15,55 @@
     <div class="container">
         <div class="m-5 text-center">
             <div class="row">
-                <div class="col-md-6 my-2">
-                    <a href="/video_stream_admin/category/add/" class="text-dark text-decoration-none">
-                        <div class="card shadow" style="width: 30rem;">
+                <div class="col-md-3 my-2">
+                    <div class="card shadow" style="width: 15rem;">
+                        <div class="card-body">
+
+                            <a href="/video_stream_admin/subscription_type/add/">
+                                <span style="font-size: 68px; color: Dodgerblue;">
+                                    <i class="fas fa-plus-circle"></i>
+                                </span>
+                            </a>
+
+                            <h5> Add New Subscription Type</h5>
+                        </div>
+                    </div>
+                </div>
+                {% for subscription_type in subscription_types %}
+                    <div class="col-md-3 my-2">
+                        <div class="card shadow" style="width: 15rem;">
                             <div class="card-body">
-                                <h5 class="card-title">Add a Category</h5>
-                                <p> Click to add a Category </p>
+                                <h4 class="card-title"> <strong>{{ subscription_type.type_name}}</strong></h4>
+
+                                <div class="py-5">
+                                    <a href="/video_stream_admin/subscriptions/edit__{{ subscription.pk }}/">
+                                        <span style="color: Dodgerblue;" class="pr-2">
+                                            <i class="fas fa-edit"></i>
+                                        </span>
+                                    </a>
+                                    <a href="/video_stream_admin/subscriptions/delete__{{ subscription.pk }}/">
+                                        <span style="color: tomato;" class="pl-2">
+                                            <i class="fas fa-trash-alt"></i>
+                                        </span>
+                                    </a>
+                                </div>
+
+
+                                <!-- <a href="javascript:" onclick="updateCart(1, {{ product.pk }})">
+                                    <span style="font-size: 20px; color: #006b1b">
+                                        <i class="fas fa-plus-circle"></i>
+                                    </span>
+                                </a>
+                                <a href="javascript:" onclick="updateCart(-1, {{ product.pk }})">
+                                    <span style="font-size: 20px; color: #ba2121;">
+                                        <i class="fas fa-minus-circle"></i>
+                                    </span>
+                                </a> -->
+
                             </div>
                         </div>
-                    </a>
-                </div>
-                <div class="col-md-6 my-2">
-                    <a href="/video_stream_admin/category/view/" class="text-dark text-decoration-none">
-                        <div class="card shadow" style="width: 30rem;">
-                            <div class="card-body">
-                                <h5 class="card-title">View Category</h5>
-                                <p> Click to View All Categories </p>
-                            </div>
-                        </div>
-                    </a>
-                </div>
+                    </div>
+                {% endfor %}
             </div>
         </div>
     </div>

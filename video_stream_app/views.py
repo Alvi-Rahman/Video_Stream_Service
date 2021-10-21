@@ -133,7 +133,7 @@ def subscription_plan_list(request):
 def subscription_type_list(request):
     return render(request, 'video_stream_app/subscription_type.html',
                   {
-                      'subscriptions': models.Subscription.objects.all(),
+                      'subscription_types': models.SubscriptionType.objects.all(),
                       'title': 'Available Plans',
                       'is_logged_in': request.user.is_authenticated,
                       'subscription_categories': 'active',
