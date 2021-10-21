@@ -174,17 +174,6 @@ def admin_product_operation(request, ops):
                                    'logout': request.user.is_authenticated,
                                    "btn_name": "ADD Subscription",
                                    "subscription_plans": "active"})
-        elif ops == 'view':
-            all_products = models.Product.objects.all()
-            return render(request, 'view_products.html',
-                          context={
-                              'is_logged_in': request.user.is_authenticated,
-                              "products": all_products,
-                              "title": "View Products",
-                              "admin": 1,
-                              'logout': request.user.is_authenticated,
-                              "admin_product": "active"
-                          })
         elif 'edit' in ops:
             prod_id = ops.split('__')[-1]
             subs = models.Subscription.objects.filter(pk=prod_id).first()
