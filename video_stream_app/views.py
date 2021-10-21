@@ -184,3 +184,61 @@ def admin_product_operation(request, ops):
             return redirect("subscription_plans")
         else:
             return redirect("subscription_plans")
+
+
+@login_required(login_url='/video_stream_admin/')
+def admin_product_type_operation(request, ops):
+    if request.method == "POST":
+        if ops == 'add':
+            form = SubscriptionForm(request.POST)
+            if form.is_valid():
+                messages.success(request, "Succesfully added.")
+                form.save()
+            else:
+                messages.error(request, "Something Went Wrong.")
+            return redirect("/video_stream_admin/subscriptions/add/")
+        elif 'edit' in ops:
+            subs_id = ops.split('__')[-1]
+            subscription = models.Subscription.objects.filter(pk=subs_id).first()
+            form = SubscriptionForm(request.POST, instance=subscription)
+            if form.is_valid():
+                form.save()
+                messages.success(request, "Succesfully Updated.")
+            else:
+                messages.error(request, "Something Went Wrong.")
+            return redirect("/video_stream_admin/subscription_plans/")
+
+    elif request.method == 'GET':
+        if ops == 'add':
+            form = SubscriptionForm()
+            return render(request, "video_stream_app/all_forms.html",
+                          context={"is_logged_in": request.user.is_authenticated,
+                                   "form": form,
+                                   "title": "Add Subscription",
+                                   "admin": 1,
+                                   'logout': request.user.is_authenticated,
+                                   "btn_name": "ADD Subscription",
+                                   "subscription_plans": "active"})
+        elif 'edit' in ops:
+            subs_id = ops.split('__')[-1]
+            subs = models.Subscription.objects.filter(pk=subs_id).first()
+            form = SubscriptionForm(initial={"subscription_type": subs.subscription_type,
+                                             "subscription_price": subs.subscription_price,
+                                             "subscription_validity": subs.subscription_validity
+                                             })
+            return render(request, "video_stream_app/all_forms.html",
+                          context={'is_logged_in': request.user.is_authenticated,
+                                   "form": form,
+                                   "title": "Edit Subscription",
+                                   "admin": True,
+                                   'logout': request.user.is_authenticated,
+                                   "btn_name": "Edit Subscription",
+                                   "subscription_plans": "active"})
+        elif 'delete' in ops:
+            subs_id = ops.split('__')[-1]
+            # return JsonResponse(cat_id, safe=False)
+            _ = models.Subscription.objects.filter(pk=subs_id).delete()
+            return redirect("subscription_plans")
+        else:
+            return redirect("subscription_plans")
+
