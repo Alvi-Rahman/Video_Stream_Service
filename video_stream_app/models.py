@@ -52,11 +52,17 @@ class User(AbstractUser):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateField(auto_now=True)
 
+    __prev_subscription = None
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.__prev_subscription = self.user_subscription
+
     def __str__(self):
         return self.username
 
     def save(self, *args, **kwargs):
-        if self.user_subscription is not None and self.purchase_date is None:
+        if self.__prev_subscription != self.user_subscription:
             self.purchase_date = timezone.now()
 
         super(User, self).save(*args, **kwargs)
