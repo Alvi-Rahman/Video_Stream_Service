@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+from django.utils import timezone
 
 
 class SubscriptionType(models.Model):
@@ -53,3 +54,9 @@ class User(AbstractUser):
 
     def __str__(self):
         return self.username
+
+    def save(self, *args, **kwargs):
+        if self.user_subscription is not None and self.purchase_date is None:
+            self.purchase_date = timezone.now()
+
+        super(User, self).save(*args, **kwargs)
