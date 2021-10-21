@@ -45,3 +45,12 @@ class SubscriptionForm(forms.ModelForm):
     class Meta:
         model = Subscription
         fields = ('subscription_type', 'subscription_price', 'subscription_validity')
+
+
+class SubscriptionTypeForm(forms.ModelForm):
+    type_name = forms.CharField(max_length=50, required=True,
+                                widget=forms.Select(attrs={'class': 'form-control'}))
+
+    class Meta:
+        model = SubscriptionType
+        fields = ('type_name',)
