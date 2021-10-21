@@ -1,6 +1,6 @@
 from django.contrib import messages
 from django.contrib.auth import login, authenticate, logout
-from .forms import (SubscriptionForm, UserRegistrationForm, UserLoginForm)
+from .forms import (SubscriptionForm, UserRegistrationForm, UserLoginForm, SubscriptionEditForm)
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.db.models import F, Sum, Count
@@ -47,7 +47,7 @@ def signup(request):
             return redirect('home')
         else:
             form = UserRegistrationForm()
-            return render(request, 'all_forms.html', {'form': form,
+            return render(request, 'video_stream_app/all_forms.html', {'form': form,
                                                       "btn_name": "SignUp",
                                                       "title": "Sign Up",
                                                       "signup": "active"})
@@ -73,7 +73,7 @@ def login_view(request):
             return redirect('home')
         else:
             form = UserLoginForm()
-            return render(request, "all_forms.html", context={"form": form,
+            return render(request, "video_stream_app/all_forms.html", context={"form": form,
                                                               "btn_name": "Login",
                                                               "title": "Login",
                                                               "login": "active"})
@@ -118,7 +118,7 @@ def video_stream_admin(request):
             return redirect('admin_home')
         else:
             form = UserLoginForm()
-            return render(request, "all_forms.html", context={"form": form,
+            return render(request, "video_stream_app/all_forms.html", context={"form": form,
                                                               "btn_name": "Login",
                                                               "title": "Admin Login",
                                                               "admin_login": "active"})
@@ -149,8 +149,8 @@ def admin_product_operation(request, ops):
             return redirect("/video_stream_admin/subscriptions/add/")
         elif 'edit' in ops:
             cat_id = ops.split('__')[-1]
-            cat = models.Product.objects.filter(pk=cat_id).first()
-            form = ProductEditForm(request.POST, instance=cat)
+            cat = models.Subscription.objects.filter(pk=cat_id).first()
+            form = SubscriptionEditForm(request.POST, instance=cat)
             if form.is_valid():
                 form.save()
                 messages.success(request, "Succesfully Updated.")
@@ -160,13 +160,13 @@ def admin_product_operation(request, ops):
         elif 'delete' in ops:
             prod_id = ops.split('__')[-1]
             # return JsonResponse(cat_id, safe=False)
-            cat = models.Product.objects.filter(pk=prod_id).delete()
+            cat = models.Subscription.objects.filter(pk=prod_id).delete()
             return JsonResponse(1, safe=False)
 
     elif request.method == 'GET':
         if ops == 'add':
             form = SubscriptionForm()
-            return render(request, "all_forms.html",
+            return render(request, "video_stream_app/all_forms.html",
                           context={"is_logged_in": request.user.is_authenticated,
                                    "form": form,
                                    "title": "Add Subscription",
@@ -188,13 +188,13 @@ def admin_product_operation(request, ops):
         elif 'edit' in ops:
             prod_id = ops.split('__')[-1]
             prod = models.Product.objects.filter(pk=prod_id).first()
-            form = ProductEditForm(initial={"product_code": prod.product_code,
+            form = SubscriptionEditForm(initial={"product_code": prod.product_code,
                                             "product_name": prod.product_name,
                                             "product_category": prod.product_category,
                                             "product_unit_price": prod.product_unit_price,
                                             "current_stock": prod.current_stock
                                             })
-            return render(request, "all_forms.html",
+            return render(request, "video_stream_app/all_forms.html",
                           context={'is_logged_in': request.user.is_authenticated,
                                    "form": form,
                                    "title": "Edit Category",
