@@ -65,4 +65,7 @@ class User(AbstractUser):
         if self.__prev_subscription != self.user_subscription:
             self.purchase_date = timezone.now()
 
+        if self.user_subscription and not self.is_subscribed :
+            self.is_subscribed = True
+
         super(User, self).save(*args, **kwargs)
