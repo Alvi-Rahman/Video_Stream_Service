@@ -13,6 +13,8 @@ urlpatterns = [
     path('video_stream_admin/', views.video_stream_admin, name="video_stream_admin"),
     path('video_stream_admin/subscription_plans/', views.subscription_plan_list,
          name="subscription_plans"),
+    path('video_stream_admin/subscription_type_list/', views.subscription_type_list,
+         name="subscription_type_list"),
     path('video_stream_admin/subscriptions/<str:ops>/',
          views.admin_product_operation, name="admin_product_operation"),
 ]
