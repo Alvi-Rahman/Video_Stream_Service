@@ -133,10 +133,10 @@ def subscription_plan_list(request):
 def subscription_type_list(request):
     return render(request, 'video_stream_app/subscription_type.html',
                   {
-                      'subscription_types': models.SubscriptionType.objects.all(),
+                      'subscription_type_lst': models.SubscriptionType.objects.all(),
                       'title': 'Available Plans',
                       'is_logged_in': request.user.is_authenticated,
-                      'subscription_categories': 'active',
+                      'subscription_types': 'active',
                       'admin': True
                   })
 
@@ -161,8 +161,7 @@ def admin_subscription_operation(request, ops):
                 messages.success(request, "Succesfully Updated.")
             else:
                 messages.error(request, "Something Went Wrong.")
-                return redirect("video_stream_admin/subscriptions/add/")
-            return redirect("/video_stream_admin/subscription_plans/")
+            return redirect("subscription_plans")
 
     elif request.method == 'GET':
         if ops == 'add':
@@ -210,7 +209,7 @@ def admin_subscription_type_operation(request, ops):
             else:
                 messages.error(request, "Something Went Wrong.")
                 return redirect("video_stream_admin/subscription_type/add/")
-            return redirect("admin_subscription_type_operation")
+            return redirect("/video_stream_admin/subscription_type/add/")
         elif 'edit' in ops:
             subs_id = ops.split('__')[-1]
             subscription_type = models.SubscriptionType.objects.filter(pk=subs_id).first()
@@ -220,7 +219,7 @@ def admin_subscription_type_operation(request, ops):
                 messages.success(request, "Succesfully Updated.")
             else:
                 messages.error(request, "Something Went Wrong.")
-            return redirect("/video_stream_admin/subscription_plans/")
+            return redirect("subscription_type_list")
 
     elif request.method == 'GET':
         if ops == 'add':
@@ -247,10 +246,10 @@ def admin_subscription_type_operation(request, ops):
                                    "btn_name": "Edit Subscription Type",
                                    "subscription_types": "active"})
         elif 'delete' in ops:
-            subs_id = ops.split('__')[-1]
+            sub_types_id = ops.split('__')[-1]
             # return JsonResponse(cat_id, safe=False)
-            _ = models.Subscription.objects.filter(pk=subs_id).delete()
-            return redirect("subscription_plans")
+            _ = models.SubscriptionType.objects.filter(pk=sub_types_id).delete()
+            return redirect("subscription_type_list")
         else:
-            return redirect("subscription_plans")
+            return redirect("subscription_type_list")
 
