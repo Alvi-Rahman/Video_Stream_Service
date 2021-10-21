@@ -161,6 +161,7 @@ def admin_subscription_operation(request, ops):
                 messages.success(request, "Succesfully Updated.")
             else:
                 messages.error(request, "Something Went Wrong.")
+                return redirect("video_stream_admin/subscriptions/add/")
             return redirect("/video_stream_admin/subscription_plans/")
 
     elif request.method == 'GET':
@@ -208,6 +209,7 @@ def admin_subscription_type_operation(request, ops):
                 form.save()
             else:
                 messages.error(request, "Something Went Wrong.")
+                return redirect("video_stream_admin/subscription_type/add/")
             return redirect("admin_subscription_type_operation")
         elif 'edit' in ops:
             subs_id = ops.split('__')[-1]
