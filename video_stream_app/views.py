@@ -142,7 +142,7 @@ def subscription_type_list(request):
 
 
 @login_required(login_url='/video_stream_admin/')
-def admin_product_operation(request, ops):
+def admin_subscription_operation(request, ops):
     if request.method == "POST":
         if ops == 'add':
             form = SubscriptionForm(request.POST)
@@ -199,7 +199,7 @@ def admin_product_operation(request, ops):
 
 
 @login_required(login_url='/video_stream_admin/')
-def admin_product_type_operation(request, ops):
+def admin_subscription_type_operation(request, ops):
     if request.method == "POST":
         if ops == 'add':
             form = SubscriptionTypeForm(request.POST)
@@ -208,7 +208,7 @@ def admin_product_type_operation(request, ops):
                 form.save()
             else:
                 messages.error(request, "Something Went Wrong.")
-            return redirect("/video_stream_admin/subscriptions/add/")
+            return redirect("admin_subscription_type_operation")
         elif 'edit' in ops:
             subs_id = ops.split('__')[-1]
             subscription = models.Subscription.objects.filter(pk=subs_id).first()
@@ -226,11 +226,11 @@ def admin_product_type_operation(request, ops):
             return render(request, "video_stream_app/all_forms.html",
                           context={"is_logged_in": request.user.is_authenticated,
                                    "form": form,
-                                   "title": "Add Subscription",
+                                   "title": "Add Subscription Type",
                                    "admin": 1,
                                    'logout': request.user.is_authenticated,
-                                   "btn_name": "ADD Subscription",
-                                   "subscription_plans": "active"})
+                                   "btn_name": "ADD Subscription Type",
+                                   "subscription_categories": "active"})
         elif 'edit' in ops:
             subs_id = ops.split('__')[-1]
             subs = models.Subscription.objects.filter(pk=subs_id).first()
