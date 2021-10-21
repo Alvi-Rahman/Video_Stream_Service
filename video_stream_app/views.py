@@ -126,12 +126,12 @@ def video_stream_admin(request):
 
 @login_required(login_url='/login/')
 def subscription_plan_list(request):
-    return render(request, 'subscriptions.html',
+    return render(request, 'video_stream_app/subscriptions.html',
                   {
                       'subscriptions': models.Subscription.objects.all(),
                       'title': 'Available Plans',
                       'is_logged_in': request.user.is_authenticated,
-                      'home': 'active',
+                      'subscription_plans': 'active',
                       'admin': True
                   })
 
