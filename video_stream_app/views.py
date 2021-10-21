@@ -1,6 +1,6 @@
 from django.contrib import messages
 from django.contrib.auth import login, authenticate, logout
-from .forms import (SubscriptionForm, UserRegistrationForm, UserLoginForm)
+from .forms import (SubscriptionForm, UserRegistrationForm, UserLoginForm, SubscriptionTypeForm)
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from . import models
@@ -190,7 +190,7 @@ def admin_product_operation(request, ops):
 def admin_product_type_operation(request, ops):
     if request.method == "POST":
         if ops == 'add':
-            form = SubscriptionForm(request.POST)
+            form = SubscriptionTypeForm(request.POST)
             if form.is_valid():
                 messages.success(request, "Succesfully added.")
                 form.save()
@@ -200,7 +200,7 @@ def admin_product_type_operation(request, ops):
         elif 'edit' in ops:
             subs_id = ops.split('__')[-1]
             subscription = models.Subscription.objects.filter(pk=subs_id).first()
-            form = SubscriptionForm(request.POST, instance=subscription)
+            form = SubscriptionTypeForm(request.POST, instance=subscription)
             if form.is_valid():
                 form.save()
                 messages.success(request, "Succesfully Updated.")
@@ -210,7 +210,7 @@ def admin_product_type_operation(request, ops):
 
     elif request.method == 'GET':
         if ops == 'add':
-            form = SubscriptionForm()
+            form = SubscriptionTypeForm()
             return render(request, "video_stream_app/all_forms.html",
                           context={"is_logged_in": request.user.is_authenticated,
                                    "form": form,
@@ -222,7 +222,7 @@ def admin_product_type_operation(request, ops):
         elif 'edit' in ops:
             subs_id = ops.split('__')[-1]
             subs = models.Subscription.objects.filter(pk=subs_id).first()
-            form = SubscriptionForm(initial={"subscription_type": subs.subscription_type,
+            form = SubscriptionTypeForm(initial={"subscription_type": subs.subscription_type,
                                              "subscription_price": subs.subscription_price,
                                              "subscription_validity": subs.subscription_validity
                                              })
