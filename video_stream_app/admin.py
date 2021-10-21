@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Subscription, User, SubscriptionType
+from .models import Subscription, User, SubscriptionType, VideoContent
 
 
 # Register your models here.
@@ -53,6 +53,16 @@ class SubscriptionTypeAdmin(admin.ModelAdmin):
     ]
 
 
+class VideoContentAdmin(admin.ModelAdmin):
+    model = VideoContent
+    list_display = [
+        "content_name",
+        "content_description",
+        "file",
+    ]
+
+
+admin.site.register(VideoContent, VideoContentAdmin)
 admin.site.register(Subscription, SubscriptionAdmin)
 admin.site.register(User, UserAdmin)
 admin.site.register(SubscriptionType, SubscriptionTypeAdmin)
