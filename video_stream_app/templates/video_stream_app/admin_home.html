@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% block title %} Admin Home | VideoStream {% endblock %}
+{% load static %}
+
+{% block content %}
+
+    {% if messages %}
+        <div class="messages">
+            {% for message in messages %}
+                <p{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</p>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+{% endblock %}

@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+{% block title %} {{ title }} | VideoStream {% endblock %}
+{% load static %}
+
+{% block content %}
+
+    {% if messages %}
+        <div class="messages">
+            {% for message in messages %}
+                <p{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</p>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    <div class="container m-5">
+        <table class="table border">
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Product Code</th>
+                    <th scope="col">Product Name</th>
+                    <th scope="col">Product Category</th>
+                    <th scope="col">Product Unit_price</th>
+                    <th scope="col">Current Stock</th>
+                    <th scope="col">Edit</th>
+                    <th scope="col">Delete</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for product in products %}
+                <tr>
+                    <th scope="row">{{ forloop.counter }}</th>
+                    <td>{{ product.product_code }}</td>
+                    <td>{{ product.product_name }}</td>
+                    <td>{{ product.product_category }}</td>
+                    <td>{{ product.product_unit_price }}</td>
+                    <td>{{ product.current_stock }}</td>
+                    <td><a href="/video_stream_admin/product/edit__{{ product.pk }}/"><i class="fas fa-edit"></i></a></td>
+                    <td><a onclick="deleteFunc({{ product.pk }})" href="" ><i class="fas fa-trash-alt"></i></a></td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+
+    <script>
+        function deleteFunc(pk) {
+            var txt;
+            if (confirm("Are you sure you want to delete!")) {
+                url = "/video_stream_admin/product/delete__"+pk+"/";
+
+                $.post(url,
+                {
+                    data: pk
+                },
+                function(data){
+                    console.log(data);
+
+                });
+
+            } else {
+                console.log("Not Deleted");
+            }
+        }
+    </script>
+
+{% endblock %}

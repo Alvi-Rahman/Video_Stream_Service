@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+{% block title %} {{ title }} | VideoStream {% endblock %}
+{% load static %}
+
+{% block content %}
+
+    {% if messages %}
+        <div class="messages">
+            {% for message in messages %}
+                <p{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</p>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    <div class="container">
+        <div class="m-5 text-center">
+            <div class="row">
+                <div class="col-md-6 my-2">
+                    <a href="/video_stream_admin/product/add/" class="text-dark text-decoration-none">
+                        <div class="card shadow" style="width: 30rem;">
+                            <div class="card-body">
+                                <h5 class="card-title">Add a Product</h5>
+                                <p> Click to add a Product </p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-md-6 my-2">
+                    <a href="/video_stream_admin/product/view/" class="text-dark text-decoration-none">
+                        <div class="card shadow" style="width: 30rem;">
+                            <div class="card-body">
+                                <h5 class="card-title">View Products</h5>
+                                <p> Click to View All Product </p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+{#                <div class="col-md-4 my-2">#}
+{#                    <a href="/" class="text-dark text-decoration-none">#}
+{#                        <div class="card shadow" style="width: 18rem;">#}
+{#                            <div class="card-body">#}
+{#                                <h5 class="card-title">Delete Product</h5>#}
+{#                                <p> Click to delete a Product </p>#}
+{#                            </div>#}
+{#                        </div>#}
+{#                    </a>#}
+{#                </div>#}
+            </div>
+        </div>
+    </div>
+
+
+{% endblock %}
