@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 # from django.contrib.auth.models import User
-from .models import Subscription, SubscriptionType, User
+from .models import Subscription, SubscriptionType, User, VideoContent
 
 
 class UserRegistrationForm(UserCreationForm):
@@ -77,3 +77,9 @@ class UserEditForm(forms.ModelForm):
         model = User
         fields = ('username', 'full_name', 'email', 'phone', 'user_subscription',
                   'user_type', 'is_subscribed', 'is_blocked', 'purchase_date')
+
+
+class VideoContentUploadForm(forms.ModelForm):
+    class Meta:
+        model = VideoContent
+        fields = ('content_name', 'content_description', 'file', 'allowed_subscription')

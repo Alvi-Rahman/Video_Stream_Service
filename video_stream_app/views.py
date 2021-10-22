@@ -156,6 +156,18 @@ def user_list(request):
 
 
 @login_required(login_url='/video_stream_admin/')
+def video_list(request):
+    return render(request, 'video_stream_app/videos.html',
+                  {
+                      'videos': models.VideoContent.objects.all(),
+                      'title': 'Videos',
+                      'is_logged_in': request.user.is_authenticated,
+                      'video_link': 'active',
+                      'admin': True
+                  })
+
+
+@login_required(login_url='/video_stream_admin/')
 def admin_subscription_operation(request, ops):
     if request.method == "POST":
         if ops == 'add':

@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+{% block title %} {{ title }} | VideoStream {% endblock %}
+{% load static %}
+
+{% block content %}
+
+    {% if messages %}
+        <div class="messages">
+            {% for message in messages %}
+                <p{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</p>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+
+
+    <div class="container">
+        <div class="m-5 text-center">
+            <div class="row">
+                <div class="col-md-3 my-2">
+                    <div class="card shadow" style="width: 15rem;">
+                        <div class="card-body">
+
+                            <a href="/video_stream_admin/videos/add/">
+                                <span style="font-size: 48px; color: Dodgerblue;">
+                                    <i class="fas fa-plus-circle"></i>
+                                </span>
+                            </a>
+
+                            <h5> Add New Video </h5>
+                        </div>
+                    </div>
+                </div>
+                {% for video in videos %}
+                    <div class="col-md-3 my-2">
+                        <div class="card shadow" style="width: 15rem;">
+                            <div class="card-body">
+                                <h4 class="card-title"> <strong>{{ video.content_name}}</strong></h4>
+                                <h6> {{ video.content_description}} </h6>
+                                <h5> {{ video.allowed_subscription}} </h5>
+
+                                <div class="pt-1">
+                                    <a href="/video_stream_admin/videos/edit__{{ video.pk }}/">
+                                        <span style="color: Dodgerblue;" class="pr-2">
+                                            <i class="fas fa-edit"></i>
+                                        </span>
+                                    </a>
+                                    <a href="/video_stream_admin/videos/delete__{{ video.pk }}/">
+                                        <span style="color: tomato;" class="pl-2">
+                                            <i class="fas fa-trash-alt"></i>
+                                        </span>
+                                    </a>
+                                </div>
+
+
+                                <!-- <a href="javascript:" onclick="updateCart(1, {{ product.pk }})">
+                                    <span style="font-size: 20px; color: #006b1b">
+                                        <i class="fas fa-plus-circle"></i>
+                                    </span>
+                                </a>
+                                <a href="javascript:" onclick="updateCart(-1, {{ product.pk }})">
+                                    <span style="font-size: 20px; color: #ba2121;">
+                                        <i class="fas fa-minus-circle"></i>
+                                    </span>
+                                </a> -->
+
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+
+
+
+{% endblock %}
