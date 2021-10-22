@@ -1,3 +1,6 @@
+import os
+
+from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth import login, authenticate, logout
 from django.http import JsonResponse
@@ -6,6 +9,8 @@ from .forms import (SubscriptionForm, UserRegistrationForm, UserLoginForm, Subsc
                     VideoContentUploadForm)
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
+from django.core.files.storage import default_storage
+from django.core.files.base import ContentFile
 from . import models
 
 
@@ -337,19 +342,33 @@ def user_operations(request, ops):
 def admin_video_operation(request, ops):
     if request.method == "POST":
         if ops == 'add':
-            data = None
-            # form = VideoContentUploadForm(request.POST, request.FILES)
-            # # print(form.is_valid())
-            # if form.is_valid():
-            #     messages.success(request, "Succesfully added.")
-            #     form.save()
-            # else:
-            #     messages.error(request, "Something Went Wrong.")
+            form = VideoContentUploadForm(request.POST, request.FILES)
+            # print(form.is_valid())
+            if form.is_valid():
+                content = None
+                if bool(request.FILES.get('file', False)):
+                    file = request.FILES.get('file')
+                    content = "videos/" + file.name
+                    if not os.path.exists(settings.MEDIA_ROOT + "videos/"):
+                        os.mkdir(settings.MEDIA_ROOT + "videos/")
+                    default_storage.save(settings.MEDIA_ROOT + "videos/" + file.name, ContentFile(file.read()))
+
+                instance = models.VideoContent.objects.create(
+                    content_name=request.POST.get('content_name', None),
+                    content_description=request.POST.get('content_description', None),
+                    file=content,
+                )
+                if request.POST.getlist('allowed_subscription', None):
+                    instance.allowed_subscription.add(*models.SubscriptionType.objects.filter(pk__in=request.POST.getlist('allowed_subscription')))
+
+                messages.success(request, "Succesfully added.")
+            else:
+                messages.error(request, "Something Went Wrong.")
             return redirect("video_list")
         elif 'edit' in ops:
             subs_id = ops.split('__')[-1]
             subscription = models.Subscription.objects.filter(pk=subs_id).first()
-            form = SubscriptionForm(request.POST, instance=subscription)
+            form = VideoContentUploadForm(request.POST, instance=subscription)
             if form.is_valid():
                 form.save()
                 messages.success(request, "Succesfully Updated.")
