@@ -76,8 +76,8 @@ class VideoContent(models.Model):
     content_name = models.CharField(max_length=255, blank=True, null=True)
     content_description = models.TextField(max_length=2000, blank=True, null=True)
     file = models.FileField(upload_to='videos/', null=True, blank=True, verbose_name="content_file")
-    allowed_subscription = models.ForeignKey(SubscriptionType, on_delete=models.SET_NULL,
-                                             blank=True, null=True, related_name="subscription_type")
+    allowed_subscription = models.ManyToManyField(SubscriptionType,
+                                                  null=True, related_name="subscription_type")
 
     def __str__(self):
         return self.content_name
