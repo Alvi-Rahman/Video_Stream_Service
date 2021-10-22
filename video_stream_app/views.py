@@ -388,12 +388,13 @@ def admin_video_operation(request, ops):
                                    "btn_name": "ADD Video",
                                    "video_link": "active"})
         elif 'edit' in ops:
-            subs_id = ops.split('__')[-1]
-            subs = models.Subscription.objects.filter(pk=subs_id).first()
-            form = SubscriptionForm(initial={"subscription_type": subs.subscription_type,
-                                             "subscription_price": subs.subscription_price,
-                                             "subscription_validity": subs.subscription_validity
-                                             })
+            video_id = ops.split('__')[-1]
+            video_content = models.VideoContent.objects.filter(pk=video_id).first()
+            form = VideoContentUploadForm(initial={"content_name": video_content.content_name,
+                                                   "content_description": video_content.content_description,
+                                                   "file": video_content.file,
+                                                   "allowed_subscription": video_content.allowed_subscription
+                                                   })
             return render(request, "video_stream_app/all_forms.html",
                           context={'is_logged_in': request.user.is_authenticated,
                                    "form": form,
