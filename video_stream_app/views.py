@@ -2,7 +2,8 @@ from django.contrib import messages
 from django.contrib.auth import login, authenticate, logout
 from django.http import JsonResponse
 
-from .forms import (SubscriptionForm, UserRegistrationForm, UserLoginForm, SubscriptionTypeForm, UserEditForm)
+from .forms import (SubscriptionForm, UserRegistrationForm, UserLoginForm, SubscriptionTypeForm, UserEditForm,
+                    VideoContentUploadForm)
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from . import models
@@ -330,3 +331,60 @@ def user_operations(request, ops):
             return JsonResponse(1, safe=False)
 
     return redirect("user_list")
+
+
+@login_required(login_url='/video_stream_admin/')
+def admin_video_operation(request, ops):
+    if request.method == "POST":
+        if ops == 'add':
+            form = SubscriptionForm(request.POST)
+            if form.is_valid():
+                messages.success(request, "Succesfully added.")
+                form.save()
+            else:
+                messages.error(request, "Something Went Wrong.")
+            return redirect("/video_stream_admin/subscriptions/add/")
+        elif 'edit' in ops:
+            subs_id = ops.split('__')[-1]
+            subscription = models.Subscription.objects.filter(pk=subs_id).first()
+            form = SubscriptionForm(request.POST, instance=subscription)
+            if form.is_valid():
+                form.save()
+                messages.success(request, "Succesfully Updated.")
+            else:
+                messages.error(request, "Something Went Wrong.")
+            return redirect("subscription_plans")
+
+    elif request.method == 'GET':
+        if ops == 'add':
+            form = VideoContentUploadForm()
+            return render(request, "video_stream_app/all_forms.html",
+                          context={"is_logged_in": request.user.is_authenticated,
+                                   "form": form,
+                                   "title": "Add Video",
+                                   "admin": 1,
+                                   'logout': request.user.is_authenticated,
+                                   "btn_name": "ADD Video",
+                                   "video_link": "active"})
+        elif 'edit' in ops:
+            subs_id = ops.split('__')[-1]
+            subs = models.Subscription.objects.filter(pk=subs_id).first()
+            form = SubscriptionForm(initial={"subscription_type": subs.subscription_type,
+                                             "subscription_price": subs.subscription_price,
+                                             "subscription_validity": subs.subscription_validity
+                                             })
+            return render(request, "video_stream_app/all_forms.html",
+                          context={'is_logged_in': request.user.is_authenticated,
+                                   "form": form,
+                                   "title": "Edit Subscription",
+                                   "admin": True,
+                                   'logout': request.user.is_authenticated,
+                                   "btn_name": "Edit Subscription",
+                                   "subscription_plans": "active"})
+        elif 'delete' in ops:
+            subs_id = ops.split('__')[-1]
+            # return JsonResponse(cat_id, safe=False)
+            _ = models.Subscription.objects.filter(pk=subs_id).delete()
+            return redirect("subscription_plans")
+        else:
+            return redirect("subscription_plans")
