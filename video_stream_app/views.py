@@ -337,13 +337,14 @@ def user_operations(request, ops):
 def admin_video_operation(request, ops):
     if request.method == "POST":
         if ops == 'add':
-            form = VideoContentUploadForm(request.POST, request.FILES)
-            # print(form.is_valid())
-            if form.is_valid():
-                messages.success(request, "Succesfully added.")
-                form.save()
-            else:
-                messages.error(request, "Something Went Wrong.")
+            data = None
+            # form = VideoContentUploadForm(request.POST, request.FILES)
+            # # print(form.is_valid())
+            # if form.is_valid():
+            #     messages.success(request, "Succesfully added.")
+            #     form.save()
+            # else:
+            #     messages.error(request, "Something Went Wrong.")
             return redirect("video_list")
         elif 'edit' in ops:
             subs_id = ops.split('__')[-1]
