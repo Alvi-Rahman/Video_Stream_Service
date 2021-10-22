@@ -337,13 +337,13 @@ def user_operations(request, ops):
 def admin_video_operation(request, ops):
     if request.method == "POST":
         if ops == 'add':
-            form = SubscriptionForm(request.POST)
+            form = VideoContentUploadForm(request.POST)
             if form.is_valid():
                 messages.success(request, "Succesfully added.")
                 form.save()
             else:
                 messages.error(request, "Something Went Wrong.")
-            return redirect("/video_stream_admin/subscriptions/add/")
+            return redirect("/video_stream_admin/videos/add/")
         elif 'edit' in ops:
             subs_id = ops.split('__')[-1]
             subscription = models.Subscription.objects.filter(pk=subs_id).first()

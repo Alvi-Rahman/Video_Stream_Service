@@ -25,5 +25,7 @@ urlpatterns = [
          views.admin_subscription_type_operation, name="admin_subscription_type_operation"),
     path('video_stream_admin/user/<str:ops>/',
          views.user_operations, name="user_operations"),
+    path('video_stream_admin/videos/<str:ops>/',
+         views.admin_video_operation, name="user_operations"),
 
 ]
