@@ -37,7 +37,13 @@
                             <div class="card-body">
                                 <h4 class="card-title"> <strong>{{ video.content_name}}</strong></h4>
                                 <h6> {{ video.content_description}} </h6>
-                                <h5> {{ video.allowed_subscription}} </h5>
+                                <h5>
+                                    {% if video.allowed_subscription.exists %}
+                                        {{ video.allowed_subscription }}
+                                    {% else %}
+                                        None
+                                    {% endif %}
+                                </h5>
 
                                 <div class="pt-1">
                                     <a href="/video_stream_admin/videos/edit__{{ video.pk }}/">
