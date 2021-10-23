@@ -389,7 +389,6 @@ def admin_video_operation(request, ops):
             _ = models.VideoContent.objects.filter(pk=video_id).delete()
             return JsonResponse(1, safe=False)
 
-
     elif request.method == 'GET':
         if ops == 'add':
             form = VideoContentUploadForm()
@@ -400,13 +399,17 @@ def admin_video_operation(request, ops):
                                    "admin": 1,
                                    'logout': request.user.is_authenticated,
                                    "btn_name": "ADD Video",
-                                   "video_link": "active"})
+                                   "video_link": "active",
+                                   "video_preview": True,
+                                   })
         elif 'edit' in ops:
             video_id = ops.split('__')[-1]
             video_content = models.VideoContent.objects.filter(pk=video_id).first()
             form = VideoContentUploadForm(initial={"content_name": video_content.content_name,
                                                    "content_description": video_content.content_description,
+                                                   "file_preview": video_content.file,
                                                    "file": video_content.file,
+                                                   "cover_image_preview": video_content.cover_image,
                                                    'cover_image': video_content.cover_image,
                                                    "allowed_subscription": video_content.allowed_subscription.all()
                                                    })
@@ -417,7 +420,10 @@ def admin_video_operation(request, ops):
                                    "admin": True,
                                    'logout': request.user.is_authenticated,
                                    "btn_name": "Edit Video",
-                                   "video_link": "active"})
+                                   "video_link": "active",
+                                   "video_preview": True,
+                                   'video_content': video_content
+                                   })
         elif 'delete' in ops:
             subs_id = ops.split('__')[-1]
             # return JsonResponse(cat_id, safe=False)

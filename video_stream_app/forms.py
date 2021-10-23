@@ -2,6 +2,7 @@ from django import forms
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 # from django.contrib.auth.models import User
 from .models import Subscription, SubscriptionType, User, VideoContent
+from .widgets import PictureWidget
 
 
 class UserRegistrationForm(UserCreationForm):
@@ -80,26 +81,38 @@ class UserEditForm(forms.ModelForm):
 
 
 class VideoContentUploadForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        self.file_preview = kwargs.pop('file_preview', None)
+        super(VideoContentUploadForm, self).__init__(*args, **kwargs)
+
     content_name = forms.CharField(max_length=255, required=False,
                                    widget=forms.TextInput(attrs={'class': 'form-control'}))
     content_description = forms.CharField(max_length=255, required=False,
                                           widget=forms.Textarea(attrs={'class': 'form-control'}))
+    file_preview = forms.FileField(required=False,
+                                   widget=PictureWidget(
+                                       id='myvideo', link="", video=True))
+
     file = forms.FileField(required=True,
-                           widget=forms.FileInput(attrs={'class': 'form-control'}))
-    img_preview = forms.ImageField(
-        widget=forms.HiddenInput(attrs={'id': 'myimage', 'src': 'xyz'}))
+                           widget=forms.FileInput(attrs={
+                                          'class': 'form-control',
+                                          'type': 'file'
+                                      }))
+    cover_image_preview = forms.ImageField(required=False,
+                                           widget=PictureWidget(id='myimage', link=""))
     cover_image = forms.FileField(required=False,
                                   widget=forms.FileInput(
                                       attrs={
                                           'class': 'form-control',
                                           'onchange': 'readURL(this);',
-                                          'type': 'file',
-
-                                             }))
+                                          'type': 'file'
+                                      }))
     allowed_subscription = forms.ModelMultipleChoiceField(queryset=SubscriptionType.objects.all(),
                                                           widget=forms.SelectMultiple(attrs={'class': 'form-control'}))
 
     class Meta:
         model = VideoContent
-        fields = ('content_name', 'content_description', 'file',
-                  'cover_image', 'allowed_subscription')
+        fields = ('content_name', 'content_description', 'file_preview',
+                  'file', 'cover_image_preview',
+                  'cover_image', 'allowed_subscription'
+                  )
