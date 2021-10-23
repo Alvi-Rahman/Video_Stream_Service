@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 # from django.contrib.auth.models import User
-from .models import Subscription, SubscriptionType, User, VideoContent
+from .models import Subscription, SubscriptionType, User, VideoContent, UserPayments
 from .widgets import PictureWidget
 
 
@@ -115,3 +115,14 @@ class VideoContentUploadForm(forms.ModelForm):
                   'file', 'cover_image_preview',
                   'cover_image', 'allowed_subscription'
                   )
+
+
+class PaymentForm(forms.ModelForm):
+    payment_method = forms.ChoiceField(widget=forms.Select(attrs={'class': 'form-control'}))
+    paid_amount = forms.DecimalField(widget=forms.TextInput(attrs={'class': 'form-control'}))
+    card_no = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}))
+    mfs_channel = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}))
+
+    class Meta:
+        model = UserPayments
+        fields = ('payment_method', 'paid_amount', 'card_no', 'mfs_channel')
