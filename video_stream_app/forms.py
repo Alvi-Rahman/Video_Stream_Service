@@ -120,8 +120,10 @@ class VideoContentUploadForm(forms.ModelForm):
 class PaymentForm(forms.ModelForm):
     payment_method = forms.ChoiceField(choices=UserPayments.PAYMENT_CHOICES ,widget=forms.Select(attrs={'class': 'form-control'}))
     paid_amount = forms.DecimalField(widget=forms.TextInput(attrs={'class': 'form-control'}))
-    card_no = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}))
-    mfs_channel = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}))
+    card_no = forms.CharField(required=False,
+                              widget=forms.TextInput(attrs={'class': 'form-control'}))
+    mfs_channel = forms.CharField(required=False,
+                                  widget=forms.TextInput(attrs={'class': 'form-control'}))
 
     class Meta:
         model = UserPayments

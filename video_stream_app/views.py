@@ -1,4 +1,5 @@
 import os
+from decimal import Decimal
 
 from django.conf import settings
 from django.contrib import messages
@@ -502,6 +503,8 @@ def payments(request, pk):
                        "btn_name": "Purchase",
                        })
     elif request.method == "POST":
+        form = PaymentForm(request.POST)
+
         payment_method = request.POST.get('payment_method', None)
         paid_amount = request.POST.get('paid_amount', None)
         card_no = request.POST.get('card_no', None)
@@ -509,16 +512,32 @@ def payments(request, pk):
 
         user_subscription = models.Subscription.objects.filter(pk=pk).first()
 
-        request.user.user_subscription = user_subscription
-        request.user.save()
-        request.user.refresh_from_db()
+        if form.is_valid():
+            if Decimal(paid_amount) != user_subscription.subscription_price:
+                messages.warning(request, "Payment amount miss-match")
+                return render(request, 'video_stream_app/all_forms.html',
+                              {'form': form,
+                               'title': 'Payment',
+                               'is_logged_in': request.user.is_authenticated,
+                               'home': 'active',
+                               'admin': False,
+                               "btn_name": "Purchase",
+                               })
 
-        UserPayments.objects.create(
-            payment_method=payment_method,
-            paid_amount=paid_amount,
-            card_no=card_no,
-            mfs_channel=mfs_channel,
-            user=request.user
-        )
+            request.user.user_subscription = user_subscription
+            request.user.save()
+            request.user.refresh_from_db()
+
+            UserPayments.objects.create(
+                payment_method=payment_method,
+                paid_amount=paid_amount,
+                card_no=card_no,
+                mfs_channel=mfs_channel,
+                user=request.user
+            )
+
+            messages.success(request, 'Payment Successful!')
+        else:
+            messages.warning(request, "Payment Failed")
 
         return redirect('home')
