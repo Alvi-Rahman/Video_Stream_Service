@@ -401,6 +401,7 @@ def admin_video_operation(request, ops):
             form = VideoContentUploadForm(initial={"content_name": video_content.content_name,
                                                    "content_description": video_content.content_description,
                                                    "file": video_content.file,
+                                                   'cover_image': video_content.cover_image,
                                                    "allowed_subscription": video_content.allowed_subscription.all()
                                                    })
             return render(request, "video_stream_app/all_forms.html",
