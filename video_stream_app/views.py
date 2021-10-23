@@ -407,9 +407,7 @@ def admin_video_operation(request, ops):
             video_content = models.VideoContent.objects.filter(pk=video_id).first()
             form = VideoContentUploadForm(initial={"content_name": video_content.content_name,
                                                    "content_description": video_content.content_description,
-                                                   "file_preview": video_content.file,
                                                    "file": video_content.file,
-                                                   "cover_image_preview": video_content.cover_image,
                                                    'cover_image': video_content.cover_image,
                                                    "allowed_subscription": video_content.allowed_subscription.all()
                                                    })
