@@ -623,8 +623,8 @@ def user_info(request):
                 form.save()
                 messages.success(request, "Successfull Updated!")
             else:
-                messages.warning(request, "Invoked permission")
+                messages.warning(request, "Permission Denied")
         else:
-            messages.warning(request, "Invoked permission")
+            messages.warning(request, "Permission Denied")
 
         return redirect('user_info')
