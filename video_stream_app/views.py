@@ -383,6 +383,12 @@ def admin_video_operation(request, ops):
             else:
                 messages.error(request, "Something Went Wrong.")
             return redirect("subscription_plans")
+        elif 'delete' in ops:
+            video_id = ops.split('__')[-1]
+            # return JsonResponse(cat_id, safe=False)
+            _ = models.VideoContent.objects.filter(pk=video_id).delete()
+            return JsonResponse(1, safe=False)
+
 
     elif request.method == 'GET':
         if ops == 'add':
