@@ -82,3 +82,18 @@ class VideoContent(models.Model):
 
     def __str__(self):
         return self.content_name
+
+
+class UserPayments(models.Model):
+    PAYMENT_CHOICES = [
+        ("VISA", "Visa"),
+        ("MASTERCARD", "Mastercard"),
+        ("ANEX", "Amex"),
+        ("MFS", "MFS"),
+    ]
+
+    id = models.AutoField(primary_key=True)
+    payment_method = models.CharField(choices=PAYMENT_CHOICES, max_length=100, blank=True, null=True)
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, related_name='user_payment',
+                             blank=True, null=True)
+    paid_amount = models.DecimalField(max_digits=10, decimal_places=2, default=0)
