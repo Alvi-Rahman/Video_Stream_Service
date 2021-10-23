@@ -12,14 +12,22 @@ from django.contrib.auth.decorators import login_required
 from django.core.files.storage import default_storage
 from django.core.files.base import ContentFile
 from . import models
+from .models import VideoContent
 
 
 @login_required(login_url='/login/')
 def home(request):
+    video_lst = []
+    if request.user.is_subscribed:
+        subs = request.user.user_subscription.subscription_type
+        video_lst = VideoContent.objects.filter(allowed_subscription__type_name=subs.type_name)
+
     return render(request, 'video_stream_app/home_page.html',
                   {
+                      'subscribed': request.user.is_subscribed,
                       'is_logged_in': request.user.is_authenticated,
-                      'home': 'active'
+                      'home': 'active',
+                      'video_list': video_lst
                   })
 
 

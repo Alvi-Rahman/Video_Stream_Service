@@ -12,45 +12,33 @@
         </div>
     {% endif %}
 
+    {% if not subscribed %}
 
+        <div class="container">
+            <div class="m-5 text-center">
 
-    <div class="container">
-        <div class="m-5 text-center">
-            <div class="row">
-                <div class="col-md-12 my-2">
-                    <a href="/plans/" class="text-dark text-decoration-none">
-                        <div class="card shadow" style="width: 60rem;">
-                            <div class="card-body">
-                                <h5 class="card-title">Select Plans</h5>
-                                <p> Click to view available plans </p>
+                <h1>You are not Subscribed! Please choose a plan to proceed!</h1>
+
+                <br>
+
+                <div class="row">
+                    <div class="col-md-12 my-2">
+                        <a href="/plans/" class="text-dark text-decoration-none">
+                            <div class="card shadow" style="width: 60rem;">
+                                <div class="card-body">
+                                    <h5 class="card-title">Select Plans</h5>
+                                    <p> Click to view available plans </p>
+                                </div>
                             </div>
-                        </div>
-                    </a>
+                        </a>
+                    </div>
                 </div>
-{#                <div class="col-md-6 my-2">#}
-{#                    <a href="/categories/" class="text-dark text-decoration-none">#}
-{#                        <div class="card shadow" style="width: 30rem;">#}
-{#                            <div class="card-body">#}
-{#                                <h5 class="card-title">View Categories</h5>#}
-{#                                <p> Click to search by category </p>#}
-{#                            </div>#}
-{#                        </div>#}
-{#                    </a>#}
-{#                </div>#}
-{#                #}
-{#                <div class="col-md-4 my-2">#}
-{#                    <a href="/" class="text-dark text-decoration-none">#}
-{#                        <div class="card shadow" style="width: 18rem;">#}
-{#                            <div class="card-body">#}
-{#                                <h5 class="card-title">Delete Product</h5>#}
-{#                                <p> Click to delete a Product </p>#}
-{#                            </div>#}
-{#                        </div>#}
-{#                    </a>#}
-{#                </div>#}
             </div>
         </div>
-    </div>
+
+    {% else %}
+        aa
+    {% endif %}
 
 
 {% endblock %}
