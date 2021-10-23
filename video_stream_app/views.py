@@ -513,7 +513,7 @@ def payments(request, pk):
         user_subscription = models.Subscription.objects.filter(pk=pk).first()
 
         if form.is_valid():
-            if Decimal(paid_amount) != user_subscription.subscription_price:
+            if Decimal(paid_amount) < user_subscription.subscription_price:
                 messages.warning(request, "Payment amount miss-match")
                 return render(request, 'video_stream_app/all_forms.html',
                               {'form': form,
@@ -541,3 +541,19 @@ def payments(request, pk):
             messages.warning(request, "Payment Failed")
 
         return redirect('home')
+
+
+def video_play(request, pk):
+    video = VideoContent.objects.filter(pk=pk).first()
+
+    subs = request.user.user_subscription.subscription_type
+    video_lst = VideoContent.objects.filter(allowed_subscription__type_name=subs.type_name).exclude(pk=pk)
+
+    return render(request, 'video_stream_app/video_play.html',
+                  {'title': video.content_name,
+                   'is_logged_in': request.user.is_authenticated,
+                   'home': 'active',
+                   'admin': False,
+                   'video': video,
+                   'video_list': video_lst
+                   })

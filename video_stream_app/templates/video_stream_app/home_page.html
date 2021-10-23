@@ -37,7 +37,27 @@
         </div>
 
     {% else %}
-        aa
+        <div class="container">
+        <div class="m-5 text-center">
+            <div class="row">
+                {% for video in video_list %}
+                    <a href="/video_play/{{ video.pk }}" class="text-decoration-none text-dark">
+                        <div class="col-md-4 my-2">
+                            <div class="card shadow" style="width: 20rem;">
+                                <div class="card-body">
+                                    <video width="280" height="180" poster="/media/{{ video.cover_image }}" controls>
+                                       <source src="/media/{{ video.file }}" type="video/mp4">
+                                    </video>
+                                    <h5 class="card-title">{{ video.content_name}}</h5>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
     {% endif %}
 
 

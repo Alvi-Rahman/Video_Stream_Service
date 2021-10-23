@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+{% block title %} {{ title }} | VideoStream {% endblock %}
+{% load static %}
+{% load custom_tags %}
+
+{% block content %}
+
+    {% if messages %}
+        <div class="messages">
+            {% for message in messages %}
+                <p{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</p>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+
+    <div class="container">
+        <div class="m-5 text-center">
+            <div class="row">
+
+                <div class="col-md-12 my-2">
+                    <div class="card shadow">
+                        <div class="card-body">
+
+                            <h3 class="card-title">{{ video.content_name}}</h3>
+                            <video width="720px" height="480px" poster="/media/{{ video.cover_image }}" controls>
+                               <source src="/media/{{ video.file }}" type="video/mp4">
+                            </video>
+                            <br><br>
+                            <h6 class="text-left"> {{ video.content_description }} </h6>
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+
+    <div class="container">
+        <div class="m-5 text-center">
+            <div class="row">
+                {% for video in video_list %}
+                    <a href="/video_play/{{ video.pk }}" class="text-decoration-none text-dark">
+                        <div class="col-md-4 my-2">
+                            <div class="card shadow" style="width: 20rem;">
+                                <div class="card-body">
+                                    <video width="280" height="180" poster="/media/{{ video.cover_image }}" controls>
+                                       <source src="/media/{{ video.file }}" type="video/mp4">
+                                    </video>
+                                    <h5 class="card-title">{{ video.content_name}}</h5>
+
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                {% endfor %}
+
+
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
