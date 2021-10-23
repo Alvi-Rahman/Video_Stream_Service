@@ -78,6 +78,12 @@ class User(AbstractUser):
                               self.user_subscription.subscription_validity,
                               views=False)
 
+    @property
+    def get_remaining_time_validation(self):
+        return calculate_time(self.purchase_date,
+                              self.user_subscription.subscription_validity,
+                              views=True)
+
 
 class VideoContent(models.Model):
     id = models.AutoField(primary_key=True)

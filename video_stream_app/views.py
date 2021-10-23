@@ -5,6 +5,7 @@ from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth import login, authenticate, logout
 from django.http import JsonResponse
+from django.utils import timezone
 
 from .forms import (SubscriptionForm, UserRegistrationForm, UserLoginForm, SubscriptionTypeForm, UserEditForm,
                     VideoContentUploadForm, PaymentForm, EndUserEditForm)
@@ -599,3 +600,31 @@ def user_info(request):
                                'logout': request.user.is_authenticated,
                                "btn_name": "Edit",
                                "user_info": "active"})
+
+    elif request.method == 'POST':
+        user = request.user
+        form = EndUserEditForm(request.POST, instance=user)
+        flag = False
+        remaining = 0
+        if form.is_valid():
+            if request.POST.get('remaining', None):
+                try:
+                    remaining = int(str(request.POST.get('remaining')).split()[0])
+                except:
+                    flag = True
+
+                if remaining != request.user.get_remaining_time_validation:
+                    flag = True
+
+            if timezone.datetime.strptime(request.POST.get('purchase_date'),'%Y-%m-%d').date() != request.user.purchase_date.date():
+                flag = True
+
+            if flag is False:
+                form.save()
+                messages.success(request, "Successfull Updated!")
+            else:
+                messages.warning(request, "Invoked permission")
+        else:
+            messages.warning(request, "Invoked permission")
+
+        return redirect('user_info')
