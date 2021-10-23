@@ -14,21 +14,29 @@ from django.core.files.storage import default_storage
 from django.core.files.base import ContentFile
 from . import models
 from .models import VideoContent, UserPayments
+from .templatetags.custom_tags import calculate_time
 
 
 @login_required(login_url='/login/')
 def home(request):
     video_lst = []
+    remaining_days = 0
     if request.user.is_subscribed:
         subs = request.user.user_subscription.subscription_type
-        video_lst = VideoContent.objects.filter(allowed_subscription__type_name=subs.type_name)
+        remaining_days = calculate_time(request.user.purchase_date,
+                                        request.user.user_subscription.subscription_validity,
+                                        views=True
+                                        )
+        if remaining_days > 0:
+            video_lst = VideoContent.objects.filter(allowed_subscription__type_name=subs.type_name)
 
     return render(request, 'video_stream_app/home_page.html',
                   {
                       'subscribed': request.user.is_subscribed,
                       'is_logged_in': request.user.is_authenticated,
                       'home': 'active',
-                      'video_list': video_lst
+                      'video_list': video_lst,
+                      'remaining_days': remaining_days
                   })
 
 

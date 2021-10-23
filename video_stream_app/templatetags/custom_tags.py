@@ -5,5 +5,8 @@ register = template.Library()
 
 
 @register.filter(name='calculate_time')
-def calculate_time(base_time, months):
-    return f"{((base_time + timezone.timedelta(days=months*30)) - timezone.now()).days} Days"
+def calculate_time(base_time, months, views=False):
+    if views:
+        return ((base_time + timezone.timedelta(days=months*30)) - timezone.now()).days
+    else:
+        return f"{((base_time + timezone.timedelta(days=months*30)) - timezone.now()).days} Days"
