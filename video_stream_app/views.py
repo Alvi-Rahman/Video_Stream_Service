@@ -353,10 +353,18 @@ def admin_video_operation(request, ops):
                         os.mkdir(settings.MEDIA_ROOT + "videos/")
                     default_storage.save(settings.MEDIA_ROOT + "videos/" + file.name, ContentFile(file.read()))
 
+                cover_image = None
+                if bool(request.FILES.get('cover_image', False)):
+                    file = request.FILES.get('cover_image')
+                    cover_image = "images/" + file.name
+                    if not os.path.exists(settings.MEDIA_ROOT + "images/"):
+                        os.mkdir(settings.MEDIA_ROOT + "images/")
+                    default_storage.save(settings.MEDIA_ROOT + "images/" + file.name, ContentFile(file.read()))
+
                 instance = models.VideoContent.objects.create(
                     content_name=request.POST.get('content_name', None),
                     content_description=request.POST.get('content_description', None),
-                    file=content,
+                    file=content, cover_image=cover_image
                 )
                 if request.POST.getlist('allowed_subscription', None):
                     instance.allowed_subscription.add(*models.SubscriptionType.objects.filter(pk__in=request.POST.getlist('allowed_subscription')))

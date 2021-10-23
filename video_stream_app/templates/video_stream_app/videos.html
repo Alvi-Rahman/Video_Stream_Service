@@ -37,7 +37,7 @@
                             <div class="card-body">
                                 <h5 class="card-title">{{ video.content_name}}</h5>
 
-                                <video width="280" height="180" {# poster="/images/w3schools_green.jpg" #} controls>
+                                <video width="280" height="180" poster="/media/{{ video.cover_image }}" controls>
                                    <source src="/media/{{ video.file }}" type="video/mp4">
                                 </video>
 
@@ -64,18 +64,6 @@
                                         </span>
                                     </a>
                                 </div>
-
-
-                                <!-- <a href="javascript:" onclick="updateCart(1, {{ product.pk }})">
-                                    <span style="font-size: 20px; color: #006b1b">
-                                        <i class="fas fa-plus-circle"></i>
-                                    </span>
-                                </a>
-                                <a href="javascript:" onclick="updateCart(-1, {{ product.pk }})">
-                                    <span style="font-size: 20px; color: #ba2121;">
-                                        <i class="fas fa-minus-circle"></i>
-                                    </span>
-                                </a> -->
 
                             </div>
                         </div>
