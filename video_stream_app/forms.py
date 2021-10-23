@@ -12,8 +12,10 @@ class UserRegistrationForm(UserCreationForm):
                              widget=forms.EmailInput(attrs={'class': 'form-control'}))
     phone = forms.CharField(max_length=15, required=False, widget=forms.TextInput(
         attrs={'class': 'form-control'}))
-    full_name = forms.CharField(max_length=15, required=False, widget=forms.EmailInput(
+    full_name = forms.CharField(max_length=15, required=False, widget=forms.TextInput(
         attrs={'class': 'form-control'}))
+    password1 = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'form-control'}))
+    password2 = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'form-control'}))
 
     class Meta:
         model = User
@@ -27,7 +29,7 @@ class UserRegistrationForm(UserCreationForm):
 
 class UserLoginForm(AuthenticationForm):
     username = forms.CharField(max_length=30, required=True)
-    password = forms.PasswordInput()
+    password = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'form-control'}))
 
     def __init__(self, *args, **kwargs):
         super(UserLoginForm, self).__init__(*args, **kwargs)
@@ -81,7 +83,7 @@ class UserEditForm(forms.ModelForm):
 
 
 class VideoContentUploadForm(forms.ModelForm):
-    
+
     content_name = forms.CharField(max_length=255, required=False,
                                    widget=forms.TextInput(attrs={'class': 'form-control'}))
     content_description = forms.CharField(max_length=255, required=False,
