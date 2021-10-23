@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Subscription, User, SubscriptionType, VideoContent
+from .models import Subscription, User, SubscriptionType, VideoContent, UserPayments
 
 
 # Register your models here.
@@ -62,6 +62,23 @@ class VideoContentAdmin(admin.ModelAdmin):
     ]
 
 
+class UserPaymentsAdmin(admin.ModelAdmin):
+    model = UserPayments
+    list_display = [
+        'payment_method',
+        'paid_amount',
+    ]
+    search_fields = [
+        'payment_method',
+        'user__username',
+        'user__email',
+    ]
+    list_filter = [
+        'payment_method'
+    ]
+
+
+admin.site.register(UserPayments, UserPaymentsAdmin)
 admin.site.register(VideoContent, VideoContentAdmin)
 admin.site.register(Subscription, SubscriptionAdmin)
 admin.site.register(User, UserAdmin)
