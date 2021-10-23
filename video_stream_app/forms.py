@@ -128,3 +128,22 @@ class PaymentForm(forms.ModelForm):
     class Meta:
         model = UserPayments
         fields = ('payment_method', 'paid_amount', 'card_no', 'mfs_channel')
+
+
+class EndUserEditForm(forms.ModelForm):
+    username = forms.CharField(max_length=255,
+                               widget=forms.TextInput(attrs={'class': 'form-control'}))
+    full_name = forms.CharField(max_length=255, required=False,
+                                widget=forms.TextInput(attrs={'class': 'form-control'}))
+    email = forms.CharField(max_length=255,
+                            widget=forms.TextInput(attrs={'class': 'form-control'}))
+    phone = forms.CharField(max_length=255, required=False,
+                            widget=forms.TextInput(attrs={'class': 'form-control'}))
+    purchase_date = forms.DateField(widget=forms.DateInput(
+        attrs={'class': 'form-control', 'readonly': 'readonly'}))
+    remaining = forms.CharField(widget=forms.TextInput(
+        attrs={'class': 'form-control', 'readonly': 'readonly'}))
+
+    class Meta:
+        model = User
+        fields = ('username', 'full_name', 'email', 'phone', 'purchase_date')

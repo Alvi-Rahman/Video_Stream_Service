@@ -7,7 +7,7 @@ from django.contrib.auth import login, authenticate, logout
 from django.http import JsonResponse
 
 from .forms import (SubscriptionForm, UserRegistrationForm, UserLoginForm, SubscriptionTypeForm, UserEditForm,
-                    VideoContentUploadForm, PaymentForm)
+                    VideoContentUploadForm, PaymentForm, EndUserEditForm)
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.core.files.storage import default_storage
@@ -21,14 +21,25 @@ from .templatetags.custom_tags import calculate_time
 def home(request):
     video_lst = []
     remaining_days = 0
-    if request.user.is_subscribed:
-        subs = request.user.user_subscription.subscription_type
-        remaining_days = calculate_time(request.user.purchase_date,
-                                        request.user.user_subscription.subscription_validity,
-                                        views=True
-                                        )
-        if remaining_days > 0:
-            video_lst = VideoContent.objects.filter(allowed_subscription__type_name=subs.type_name)
+    if not request.user.is_blocked:
+        if request.user.is_subscribed:
+            subs = request.user.user_subscription.subscription_type
+            remaining_days = calculate_time(request.user.purchase_date,
+                                            request.user.user_subscription.subscription_validity,
+                                            views=True
+                                            )
+            if remaining_days > 0:
+                video_lst = VideoContent.objects.filter(allowed_subscription__type_name=subs.type_name)
+    else:
+        return render(request, 'video_stream_app/home_page.html',
+                  {
+                      'subscribed': request.user.is_subscribed,
+                      'is_logged_in': request.user.is_authenticated,
+                      'home': 'active',
+                      'video_list': video_lst,
+                      'remaining_days': remaining_days,
+                      'blocked': True
+                  })
 
     return render(request, 'video_stream_app/home_page.html',
                   {
@@ -36,7 +47,8 @@ def home(request):
                       'is_logged_in': request.user.is_authenticated,
                       'home': 'active',
                       'video_list': video_lst,
-                      'remaining_days': remaining_days
+                      'remaining_days': remaining_days,
+                      'blocked': False
                   })
 
 
@@ -565,3 +577,25 @@ def video_play(request, pk):
                    'video': video,
                    'video_list': video_lst
                    })
+
+
+def user_info(request):
+    if request.method == "GET":
+        user = request.user
+        form = EndUserEditForm(initial={
+            "username": user.username,
+            "full_name": user.full_name,
+            "email": user.email,
+            "phone": user.phone,
+            "purchase_date": user.purchase_date,
+            'remaining': request.user.get_remaining_time
+        })
+
+        return render(request, "video_stream_app/all_forms.html",
+                      context={'is_logged_in': request.user.is_authenticated,
+                               "form": form,
+                               "title": request.user.username,
+                               "admin": False,
+                               'logout': request.user.is_authenticated,
+                               "btn_name": "Edit",
+                               "user_info": "active"})

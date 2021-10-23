@@ -12,51 +12,64 @@
         </div>
     {% endif %}
 
-    {% if not subscribed and remaining_days > 0 %}
+    {% if blocked %}
 
         <div class="container">
             <div class="m-5 text-center">
-
-                <h1>You are not Subscribed! Please choose a plan to proceed!</h1>
-
+                <h1>You Blocked! Please Contact Support!</h1>
                 <br>
-
-                <div class="row">
-                    <div class="col-md-12 my-2">
-                        <a href="/user_subscription_plans/" class="text-dark text-decoration-none">
-                            <div class="card shadow" style="width: 60rem;">
-                                <div class="card-body">
-                                    <h5 class="card-title">Select Plans</h5>
-                                    <p> Click to view available plans </p>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                </div>
             </div>
         </div>
 
     {% else %}
-        <div class="container">
-        <div class="m-5 text-center">
-            <div class="row">
-                {% for video in video_list %}
-                    <a href="/video_play/{{ video.pk }}" class="text-decoration-none text-dark">
-                        <div class="col-md-4 my-2">
-                            <div class="card shadow" style="width: 20rem;">
-                                <div class="card-body">
-                                    <video width="280" height="180" poster="/media/{{ video.cover_image }}" controls>
-                                       <source src="/media/{{ video.file }}" type="video/mp4">
-                                    </video>
-                                    <h5 class="card-title">{{ video.content_name}}</h5>
+        {% if not subscribed and remaining_days > 0 %}
+
+            <div class="container">
+                <div class="m-5 text-center">
+
+                    <h1>You are not Subscribed! Please choose a plan to proceed!</h1>
+
+                    <br>
+
+                    <div class="row">
+                        <div class="col-md-12 my-2">
+                            <a href="/user_subscription_plans/" class="text-dark text-decoration-none">
+                                <div class="card shadow" style="width: 60rem;">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Select Plans</h5>
+                                        <p> Click to view available plans </p>
+                                    </div>
                                 </div>
-                            </div>
+                            </a>
                         </div>
-                    </a>
-                {% endfor %}
+                    </div>
+                </div>
             </div>
-        </div>
-    </div>
+
+        {% else %}
+            <div class="container">
+                <div class="m-5 text-center">
+                    <div class="row">
+                        {% for video in video_list %}
+                            <a href="/video_play/{{ video.pk }}" class="text-decoration-none text-dark">
+                                <div class="col-md-4 my-2">
+                                    <div class="card shadow" style="width: 20rem;">
+                                        <div class="card-body">
+                                            <video width="280" height="180" poster="/media/{{ video.cover_image }}" controls>
+                                               <source src="/media/{{ video.file }}" type="video/mp4">
+                                            </video>
+                                            <h5 class="card-title">{{ video.content_name}}</h5>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+
+        {% endif %}
+
 
     {% endif %}
 

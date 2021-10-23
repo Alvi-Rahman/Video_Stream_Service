@@ -2,6 +2,8 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.utils import timezone
 
+from video_stream_app.templatetags.custom_tags import calculate_time
+
 
 class SubscriptionType(models.Model):
     id = models.AutoField(primary_key=True)
@@ -14,15 +16,15 @@ class SubscriptionType(models.Model):
 
 class Subscription(models.Model):
     id = models.AutoField(primary_key=True)
-    
+
     subscription_type = models.ForeignKey(SubscriptionType,
-                                        on_delete=models.SET_NULL, blank=True, null=True)
+                                          on_delete=models.SET_NULL, blank=True, null=True)
 
     subscription_price = models.DecimalField(
         max_digits=10, decimal_places=2, default=0)
     subscription_validity = models.IntegerField(
         default=0, verbose_name='subscription_validity (Months)')
-    
+
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateField(auto_now=True)
 
@@ -65,10 +67,16 @@ class User(AbstractUser):
         if self.__prev_subscription != self.user_subscription:
             self.purchase_date = timezone.now()
 
-        if self.user_subscription and not self.is_subscribed :
+        if self.user_subscription and not self.is_subscribed:
             self.is_subscribed = True
 
         super(User, self).save(*args, **kwargs)
+
+    @property
+    def get_remaining_time(self):
+        return calculate_time(self.purchase_date,
+                              self.user_subscription.subscription_validity,
+                              views=False)
 
 
 class VideoContent(models.Model):
