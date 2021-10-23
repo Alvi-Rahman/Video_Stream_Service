@@ -76,6 +76,7 @@ class VideoContent(models.Model):
     content_name = models.CharField(max_length=255, blank=True, null=True)
     content_description = models.TextField(max_length=2000, blank=True, null=True)
     file = models.FileField(upload_to='videos/', null=True, blank=True, verbose_name="content_file")
+    cover_image = models.FileField(upload_to='images/', null=True, blank=True, verbose_name='content_cover')
     allowed_subscription = models.ManyToManyField(SubscriptionType,
                                                   related_name="subscription_type")
 
