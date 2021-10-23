@@ -12,42 +12,68 @@
         </div>
     {% endif %}
 
-    <div class="container">
-        <div class="m-5 text-center">
+    <style>
+        .card {
+          border:none;
+          padding: 10px 50px;
+        }
+
+        .card::after {
+          position: absolute;
+          z-index: -1;
+          opacity: 0;
+          -webkit-transition: all 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+          transition: all 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+        }
+
+        .card:hover {
+
+
+          transform: scale(1.02, 1.02);
+          -webkit-transform: scale(1.02, 1.02);
+          backface-visibility: hidden;
+          will-change: transform;
+          box-shadow: 0 1rem 3rem rgba(0,0,0,.75) !important;
+        }
+
+        .card:hover::after {
+          opacity: 1;
+        }
+
+        .card:hover .btn-outline-primary{
+          color:white;
+          background:#007bff;
+        }
+    </style>
+
+    <div class="container-fluid">
+        <div class="container p-5">
             <div class="row">
-                <div class="col-md-6 my-2">
-                    <a href="/video_stream_admin/product/add/" class="text-dark text-decoration-none">
-                        <div class="card shadow" style="width: 30rem;">
+                {% for subscription in subscriptions %}
+                    <div class="col-lg-4 col-md-12 mb-4">
+                        <div class="card h-100 shadow-lg">
                             <div class="card-body">
-                                <h5 class="card-title">Add a Product</h5>
-                                <p> Click to add a Product </p>
+                                <div class="text-center p-3">
+                                    <h5 class="card-title"> {{ subscription.subscription_type.type_name }} </h5>
+                                    <span class="h4"> BDT {{ subscription.subscription_price }} </span>/
+                                    {% if subscription.subscription_validity > 1 %}
+                                        {{ subscription.subscription_validity }} Months
+                                    {% else %}
+                                        Month
+                                    {% endif %}
+
+                                </div>
+                            </div>
+                            <div class="card-body text-center">
+                                <button class="btn btn-outline-primary btn-lg" style="border-radius:30px">Select</button>
                             </div>
                         </div>
-                    </a>
-                </div>
-                <div class="col-md-6 my-2">
-                    <a href="/video_stream_admin/product/view/" class="text-dark text-decoration-none">
-                        <div class="card shadow" style="width: 30rem;">
-                            <div class="card-body">
-                                <h5 class="card-title">View Products</h5>
-                                <p> Click to View All Product </p>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-{#                <div class="col-md-4 my-2">#}
-{#                    <a href="/" class="text-dark text-decoration-none">#}
-{#                        <div class="card shadow" style="width: 18rem;">#}
-{#                            <div class="card-body">#}
-{#                                <h5 class="card-title">Delete Product</h5>#}
-{#                                <p> Click to delete a Product </p>#}
-{#                            </div>#}
-{#                        </div>#}
-{#                    </a>#}
-{#                </div>#}
+                    </div>
+                {% endfor %}
             </div>
         </div>
     </div>
+
 
 
 {% endblock %}
