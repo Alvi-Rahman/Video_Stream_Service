@@ -84,10 +84,12 @@ class VideoContentUploadForm(forms.ModelForm):
                                 widget=forms.TextInput(attrs={'class': 'form-control'}))
     content_description = forms.CharField(max_length=255,
                             widget=forms.Textarea(attrs={'class': 'form-control'}))
-    file = forms.FileField(widget=forms.FileInput(attrs={'class': 'form-control', 'accept': ''}))
+    file = forms.FileField(widget=forms.FileInput(attrs={'class': 'form-control'}))
+    cover_image = forms.FileField(widget=forms.FileInput(attrs={'class': 'form-control'}))
     allowed_subscription = forms.ModelMultipleChoiceField(queryset=SubscriptionType.objects.all(),
                                                           widget=forms.SelectMultiple(attrs={'class': 'form-control'}))
 
     class Meta:
         model = VideoContent
-        fields = ('content_name', 'content_description', 'file', 'allowed_subscription')
+        fields = ('content_name', 'content_description',  'file',
+                  'cover_image', 'allowed_subscription')
