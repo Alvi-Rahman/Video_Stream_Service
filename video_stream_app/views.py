@@ -375,7 +375,8 @@ def admin_video_operation(request, ops):
                     file=content, cover_image=cover_image
                 )
                 if request.POST.getlist('allowed_subscription', None):
-                    instance.allowed_subscription.add(*models.SubscriptionType.objects.filter(pk__in=request.POST.getlist('allowed_subscription')))
+                    instance.allowed_subscription.add(
+                        *models.SubscriptionType.objects.filter(pk__in=request.POST.getlist('allowed_subscription')))
 
                 messages.success(request, "Succesfully added.")
             else:
@@ -476,6 +477,7 @@ def admin_video_operation(request, ops):
             return redirect("video_list")
 
 
+@login_required(login_url='/login/')
 def user_subscription_plans(request, *args, **kwargs):
     return render(request, 'video_stream_app/user_subscription.html',
                   {
@@ -485,3 +487,16 @@ def user_subscription_plans(request, *args, **kwargs):
                       'home': 'active',
                       'admin': False
                   })
+
+
+@login_required(login_url='/login/')
+def payments(request, *args, **kwargs):
+    form = UserRegistrationForm()
+    return render(request, 'video_stream_app/all_forms.html',
+                  {'form': form,
+                   'subscriptions': models.Subscription.objects.all(),
+                   'title': 'Subscribe',
+                   'is_logged_in': request.user.is_authenticated,
+                   'home': 'active',
+                   'admin': False
+                   })
