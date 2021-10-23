@@ -81,10 +81,7 @@ class UserEditForm(forms.ModelForm):
 
 
 class VideoContentUploadForm(forms.ModelForm):
-    def __init__(self, *args, **kwargs):
-        self.file_preview = kwargs.pop('file_preview', None)
-        super(VideoContentUploadForm, self).__init__(*args, **kwargs)
-
+    
     content_name = forms.CharField(max_length=255, required=False,
                                    widget=forms.TextInput(attrs={'class': 'form-control'}))
     content_description = forms.CharField(max_length=255, required=False,
