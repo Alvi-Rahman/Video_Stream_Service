@@ -6,7 +6,7 @@ from django.contrib.auth import login, authenticate, logout
 from django.http import JsonResponse
 
 from .forms import (SubscriptionForm, UserRegistrationForm, UserLoginForm, SubscriptionTypeForm, UserEditForm,
-                    VideoContentUploadForm)
+                    VideoContentUploadForm, PaymentForm)
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.core.files.storage import default_storage
@@ -491,11 +491,10 @@ def user_subscription_plans(request, *args, **kwargs):
 
 @login_required(login_url='/login/')
 def payments(request, *args, **kwargs):
-    form = UserRegistrationForm()
+    form = PaymentForm()
     return render(request, 'video_stream_app/all_forms.html',
                   {'form': form,
-                   'subscriptions': models.Subscription.objects.all(),
-                   'title': 'Subscribe',
+                   'title': 'Payment',
                    'is_logged_in': request.user.is_authenticated,
                    'home': 'active',
                    'admin': False
