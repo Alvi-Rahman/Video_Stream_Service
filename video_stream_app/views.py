@@ -12,7 +12,7 @@ from django.contrib.auth.decorators import login_required
 from django.core.files.storage import default_storage
 from django.core.files.base import ContentFile
 from . import models
-from .models import VideoContent
+from .models import VideoContent, UserPayments
 
 
 @login_required(login_url='/login/')
@@ -490,12 +490,35 @@ def user_subscription_plans(request, *args, **kwargs):
 
 
 @login_required(login_url='/login/')
-def payments(request, *args, **kwargs):
-    form = PaymentForm()
-    return render(request, 'video_stream_app/all_forms.html',
-                  {'form': form,
-                   'title': 'Payment',
-                   'is_logged_in': request.user.is_authenticated,
-                   'home': 'active',
-                   'admin': False
-                   })
+def payments(request, pk):
+    if request.method == "GET":
+        form = PaymentForm()
+        return render(request, 'video_stream_app/all_forms.html',
+                      {'form': form,
+                       'title': 'Payment',
+                       'is_logged_in': request.user.is_authenticated,
+                       'home': 'active',
+                       'admin': False,
+                       "btn_name": "Purchase",
+                       })
+    elif request.method == "POST":
+        payment_method = request.POST.get('payment_method', None)
+        paid_amount = request.POST.get('paid_amount', None)
+        card_no = request.POST.get('card_no', None)
+        mfs_channel = request.POST.get('mfs_channel', None)
+
+        user_subscription = models.Subscription.objects.filter(pk=pk).first()
+
+        request.user.user_subscription = user_subscription
+        request.user.save()
+        request.user.refresh_from_db()
+
+        UserPayments.objects.create(
+            payment_method=payment_method,
+            paid_amount=paid_amount,
+            card_no=card_no,
+            mfs_channel=mfs_channel,
+            user=request.user
+        )
+
+        return redirect('home')
