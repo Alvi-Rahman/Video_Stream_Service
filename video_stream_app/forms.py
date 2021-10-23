@@ -81,15 +81,16 @@ class UserEditForm(forms.ModelForm):
 
 class VideoContentUploadForm(forms.ModelForm):
     content_name = forms.CharField(max_length=255, required=False,
-                                widget=forms.TextInput(attrs={'class': 'form-control'}))
-    content_description = forms.CharField(max_length=255,
-                            widget=forms.Textarea(attrs={'class': 'form-control'}))
+                                   widget=forms.TextInput(attrs={'class': 'form-control'}))
+    content_description = forms.CharField(max_length=255, required=False,
+                                          widget=forms.Textarea(attrs={'class': 'form-control'}))
     file = forms.FileField(widget=forms.FileInput(attrs={'class': 'form-control'}))
-    cover_image = forms.FileField(widget=forms.FileInput(attrs={'class': 'form-control'}))
+    cover_image = forms.FileField(required=False,
+                                  widget=forms.FileInput(attrs={'class': 'form-control'}))
     allowed_subscription = forms.ModelMultipleChoiceField(queryset=SubscriptionType.objects.all(),
                                                           widget=forms.SelectMultiple(attrs={'class': 'form-control'}))
 
     class Meta:
         model = VideoContent
-        fields = ('content_name', 'content_description',  'file',
+        fields = ('content_name', 'content_description', 'file',
                   'cover_image', 'allowed_subscription')
