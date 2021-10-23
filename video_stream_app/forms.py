@@ -86,8 +86,16 @@ class VideoContentUploadForm(forms.ModelForm):
                                           widget=forms.Textarea(attrs={'class': 'form-control'}))
     file = forms.FileField(required=True,
                            widget=forms.FileInput(attrs={'class': 'form-control'}))
+    img_preview = forms.ImageField(
+        widget=forms.HiddenInput(attrs={'id': 'myimage', 'src': 'xyz'}))
     cover_image = forms.FileField(required=False,
-                                  widget=forms.FileInput(attrs={'class': 'form-control'}))
+                                  widget=forms.FileInput(
+                                      attrs={
+                                          'class': 'form-control',
+                                          'onchange': 'readURL(this);',
+                                          'type': 'file',
+
+                                             }))
     allowed_subscription = forms.ModelMultipleChoiceField(queryset=SubscriptionType.objects.all(),
                                                           widget=forms.SelectMultiple(attrs={'class': 'form-control'}))
 
