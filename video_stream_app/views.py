@@ -479,9 +479,9 @@ def admin_video_operation(request, ops):
 def user_subscription_plans(request, *args, **kwargs):
     return render(request, 'video_stream_app/user_subscription.html',
                   {
-                      'videos': models.VideoContent.objects.all(),
-                      'title': 'Videos',
+                      'subscriptions': models.Subscription.objects.all(),
+                      'title': 'Subscribe',
                       'is_logged_in': request.user.is_authenticated,
-                      'video_link': 'active',
+                      'home': 'active',
                       'admin': False
                   })
