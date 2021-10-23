@@ -393,16 +393,16 @@ def admin_video_operation(request, ops):
             form = VideoContentUploadForm(initial={"content_name": video_content.content_name,
                                                    "content_description": video_content.content_description,
                                                    "file": video_content.file,
-                                                   "allowed_subscription": video_content.allowed_subscription
+                                                   "allowed_subscription": video_content.allowed_subscription.all()
                                                    })
             return render(request, "video_stream_app/all_forms.html",
                           context={'is_logged_in': request.user.is_authenticated,
                                    "form": form,
-                                   "title": "Edit Subscription",
+                                   "title": "Edit Video",
                                    "admin": True,
                                    'logout': request.user.is_authenticated,
-                                   "btn_name": "Edit Subscription",
-                                   "subscription_plans": "active"})
+                                   "btn_name": "Edit Video",
+                                   "video_link": "active"})
         elif 'delete' in ops:
             subs_id = ops.split('__')[-1]
             # return JsonResponse(cat_id, safe=False)

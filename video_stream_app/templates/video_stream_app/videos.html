@@ -17,9 +17,9 @@
     <div class="container">
         <div class="m-5 text-center">
             <div class="row">
-                <div class="col-md-3 my-2">
-                    <div class="card shadow" style="width: 15rem;">
-                        <div class="card-body">
+                <div class="col-md-4 my-2">
+                    <div class="card shadow" style="width: 20rem;">
+                        <div class="card-body py-xl-5">
 
                             <a href="/video_stream_admin/videos/add/">
                                 <span style="font-size: 48px; color: Dodgerblue;">
@@ -32,20 +32,27 @@
                     </div>
                 </div>
                 {% for video in videos %}
-                    <div class="col-md-3 my-2">
-                        <div class="card shadow" style="width: 15rem;">
+                    <div class="col-md-4 my-2">
+                        <div class="card shadow" style="width: 20rem;">
                             <div class="card-body">
-                                <h4 class="card-title"> <strong>{{ video.content_name}}</strong></h4>
-                                <h6> {{ video.content_description}} </h6>
+                                <h5 class="card-title">{{ video.content_name}}</h5>
+
+                                <video width="280" height="180" {# poster="/images/w3schools_green.jpg" #} controls>
+                                   <source src="/media/{{ video.file }}" type="video/mp4">
+                                </video>
+
                                 <h5>
-                                    {% if video.allowed_subscription.exists %}
-                                        {{ video.allowed_subscription }}
-                                    {% else %}
-                                        None
-                                    {% endif %}
+                                    {% for subs in video.allowed_subscription.all %}
+
+                                        {% if forloop.counter > 1 %}
+                                            |
+                                        {% endif %}
+                                        {{ subs.type_name }}
+
+                                    {% endfor %}
                                 </h5>
 
-                                <div class="pt-1">
+                                <div>
                                     <a href="/video_stream_admin/videos/edit__{{ video.pk }}/">
                                         <span style="color: Dodgerblue;" class="pr-2">
                                             <i class="fas fa-edit"></i>
