@@ -240,7 +240,7 @@ def admin_subscription_type_operation(request, ops):
                 form.save()
             else:
                 messages.error(request, "Something Went Wrong.")
-                return redirect("video_stream_admin/subscription_type/add/")
+                return redirect("/video_stream_admin/subscription_type/add/")
             return redirect("/video_stream_admin/subscription_type/add/")
         elif 'edit' in ops:
             subs_id = ops.split('__')[-1]
@@ -374,15 +374,53 @@ def admin_video_operation(request, ops):
                 messages.error(request, "Something Went Wrong.")
             return redirect("video_list")
         elif 'edit' in ops:
-            subs_id = ops.split('__')[-1]
-            subscription = models.Subscription.objects.filter(pk=subs_id).first()
-            form = VideoContentUploadForm(request.POST, instance=subscription)
+            video_id = ops.split('__')[-1]
+            video_content = models.VideoContent.objects.filter(pk=video_id).first()
+            form = VideoContentUploadForm(request.POST, request.FILES, instance=video_content)
             if form.is_valid():
-                form.save()
+
+                if bool(request.FILES.get('file', False)):
+                    prev_file = video_content.file
+
+                    if os.path.exists(os.path.join(settings.MEDIA_ROOT, 'videos', prev_file.name)):
+                        os.remove(os.path.join(settings.MEDIA_ROOT, 'videos', prev_file.name))
+
+                    file = request.FILES.get('file')
+                    content = "videos/" + file.name
+                    if not os.path.exists(settings.MEDIA_ROOT + "videos/"):
+                        os.mkdir(settings.MEDIA_ROOT + "videos/")
+                    default_storage.save(settings.MEDIA_ROOT + "videos/" + file.name, ContentFile(file.read()))
+
+                    video_content.file = content
+
+                if bool(request.FILES.get('cover_image', False)):
+
+                    prev_file = video_content.cover_image
+
+                    if os.path.exists(os.path.join(settings.MEDIA_ROOT, 'videos', prev_file.name)):
+                        os.remove(os.path.join(settings.MEDIA_ROOT, 'videos', prev_file.name))
+
+                    file = request.FILES.get('cover_image')
+                    cover_image = "images/" + file.name
+                    if not os.path.exists(settings.MEDIA_ROOT + "images/"):
+                        os.mkdir(settings.MEDIA_ROOT + "images/")
+                    default_storage.save(settings.MEDIA_ROOT + "images/" + file.name, ContentFile(file.read()))
+
+                    video_content.cover_image = cover_image
+
+                video_content.content_name = request.POST.get('content_name', None),
+                video_content.content_description = request.POST.get('content_description', None),
+
+                if request.POST.getlist('allowed_subscription', None):
+                    video_content.allowed_subscriptio = None
+
+                    video_content.allowed_subscription.add(
+                        *models.SubscriptionType.objects.filter(pk__in=request.POST.getlist('allowed_subscription')))
+
                 messages.success(request, "Succesfully Updated.")
             else:
                 messages.error(request, "Something Went Wrong.")
-            return redirect("subscription_plans")
+            return redirect("video_list")
         elif 'delete' in ops:
             video_id = ops.split('__')[-1]
             # return JsonResponse(cat_id, safe=False)
@@ -424,7 +462,6 @@ def admin_video_operation(request, ops):
                                    })
         elif 'delete' in ops:
             subs_id = ops.split('__')[-1]
-            # return JsonResponse(cat_id, safe=False)
             _ = models.Subscription.objects.filter(pk=subs_id).delete()
             return redirect("video_list")
         else:

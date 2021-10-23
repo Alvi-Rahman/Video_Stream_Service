@@ -39,7 +39,13 @@
                     <td>{{ user.full_name }}</td>
                     <td>{{ user.email }}</td>
                     <td>{{ user.phone }}</td>
-                    <td>{{ user.user_subscription }}</td>
+                    <td>
+                        {% if user.user_subscription %}
+                            {{ user.user_subscription }}
+                        {% else %}
+                            None
+                        {% endif %}
+                    </td>
                     <td>{{ user.user_type }}</td>
                     <td>{{ user.is_blocked }}</td>
                     <td>{{ user.purchase_date }}</td>

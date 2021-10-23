@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'video_stream_app',
+    'django_cleanup.apps.CleanupConfig',
 ]
 
 MIDDLEWARE = [
