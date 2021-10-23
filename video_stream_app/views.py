@@ -474,3 +474,14 @@ def admin_video_operation(request, ops):
             return redirect("video_list")
         else:
             return redirect("video_list")
+
+
+def user_subscription_plans(request, *args, **kwargs):
+    return render(request, 'video_stream_app/user_subscription.html',
+                  {
+                      'videos': models.VideoContent.objects.all(),
+                      'title': 'Videos',
+                      'is_logged_in': request.user.is_authenticated,
+                      'video_link': 'active',
+                      'admin': False
+                  })
