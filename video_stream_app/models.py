@@ -97,3 +97,6 @@ class UserPayments(models.Model):
     user = models.ForeignKey(User, on_delete=models.SET_NULL, related_name='user_payment',
                              blank=True, null=True)
     paid_amount = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+
+    card_no = models.CharField(max_length=30, blank=True, null=True)
+    mfs_channel = models.CharField(max_length=30, blank=True, null=True)
