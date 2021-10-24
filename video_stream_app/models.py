@@ -74,15 +74,21 @@ class User(AbstractUser):
 
     @property
     def get_remaining_time(self):
-        return calculate_time(self.purchase_date,
-                              self.user_subscription.subscription_validity,
-                              views=False)
+        try:
+            return calculate_time(self.purchase_date,
+                                  self.user_subscription.subscription_validity,
+                                  views=False)
+        except:
+            return None
 
     @property
     def get_remaining_time_validation(self):
-        return calculate_time(self.purchase_date,
-                              self.user_subscription.subscription_validity,
-                              views=True)
+        try:
+            return calculate_time(self.purchase_date,
+                                  self.user_subscription.subscription_validity,
+                                  views=True)
+        except:
+            return None
 
 
 class VideoContent(models.Model):

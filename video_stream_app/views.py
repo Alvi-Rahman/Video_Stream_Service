@@ -34,7 +34,7 @@ def home(request):
     else:
         return render(request, 'video_stream_app/home_page.html',
                   {
-                      'subscribed': request.user.is_subscribed,
+                      'subscribed': False,
                       'is_logged_in': request.user.is_authenticated,
                       'home': 'active',
                       'video_list': video_lst,
@@ -436,7 +436,7 @@ def admin_video_operation(request, ops):
                             os.remove(os.path.join(settings.MEDIA_ROOT, 'videos', prev_file.name))
                         except:
                             pass
-                        
+
                     file = request.FILES.get('cover_image')
                     cover_image = "images/" + file.name
                     if not os.path.exists(settings.MEDIA_ROOT + "images/"):
