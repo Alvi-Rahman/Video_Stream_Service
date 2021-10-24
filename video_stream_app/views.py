@@ -414,7 +414,10 @@ def admin_video_operation(request, ops):
                     prev_file = video_content.file
 
                     if os.path.exists(os.path.join(settings.MEDIA_ROOT, 'videos', prev_file.name)):
-                        os.remove(os.path.join(settings.MEDIA_ROOT, 'videos', prev_file.name))
+                        try:
+                            os.remove(os.path.join(settings.MEDIA_ROOT, 'videos', prev_file.name))
+                        except:
+                            pass
 
                     file = request.FILES.get('file')
                     content = "videos/" + file.name
@@ -429,8 +432,11 @@ def admin_video_operation(request, ops):
                     prev_file = video_content.cover_image
 
                     if os.path.exists(os.path.join(settings.MEDIA_ROOT, 'videos', prev_file.name)):
-                        os.remove(os.path.join(settings.MEDIA_ROOT, 'videos', prev_file.name))
-
+                        try:
+                            os.remove(os.path.join(settings.MEDIA_ROOT, 'videos', prev_file.name))
+                        except:
+                            pass
+                        
                     file = request.FILES.get('cover_image')
                     cover_image = "images/" + file.name
                     if not os.path.exists(settings.MEDIA_ROOT + "images/"):
